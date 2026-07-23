@@ -1,0 +1,315 @@
+@import 'shepherd.js/dist/css/shepherd.css';
+
+/* tailwind config */
+@import 'tailwindcss';
+
+@utility font-kablammo {
+  font-family: 'Kablammo', serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: 'MORF' 0;
+}
+
+@font-face {
+  font-family: 'TamaConnect';
+  src: url('../fonts/tamaconnecttype.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --animate-progress: progress 1s infinite linear;
+
+  @keyframes progress {
+    0% {
+      transform: translateX(0) scaleX(0);
+    }
+    40% {
+      transform: translateX(0) scaleX(0.4);
+    }
+    100% {
+      transform: translateX(100%) scaleX(0.5);
+    }
+  }
+}
+
+@theme {
+  --animate-sway: sway 0.5s infinite ease-in-out;
+
+  @keyframes sway {
+    0% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(15deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+@utility font-kablammo {
+  font-family: 'Kablammo', 'Comic Sans MS', 'Comic Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: 'MORF' 0;
+}
+
+@utility font-tama {
+  font-family: 'TamaConnect';
+  font-weight: normal;
+  font-style: normal;
+}
+
+@utility pix-cursor-auto {
+  cursor: url('../cursors/auto.png'), auto;
+}
+
+@utility pix-cursor-pointer {
+  cursor: url('../cursors/pointer.png'), pointer;
+}
+
+@utility pix-cursor-grab {
+  cursor: url('../cursors/grab.png'), grab;
+}
+
+@utility pix-cursor-grabbing {
+  cursor: url('../cursors/grabbing.png'), grabbing;
+}
+
+:root {
+  --color-primary: #3c3c43;
+}
+
+/* styles */
+* {
+  @apply select-none touch-manipulation !pix-cursor-auto;
+}
+
+a {
+  @apply inline-block underline;
+}
+
+a,
+button,
+a *,
+button * {
+  @apply !pix-cursor-pointer;
+}
+
+html,
+body {
+  @apply overflow-hidden overscroll-none touch-none;
+}
+
+body {
+  @apply w-screen h-[100svh];
+  @apply font-mono;
+  background-color: #ffffff;
+}
+
+.webgl {
+  @apply fixed top-0 left-0 outline-none;
+}
+
+.webgl.grab {
+  @apply !pix-cursor-grab;
+}
+
+.webgl.grabbing {
+  @apply !pix-cursor-grabbing;
+}
+
+.webgl.pointer {
+  @apply !pix-cursor-pointer;
+}
+
+main footer {
+  @apply fixed bottom-0 w-full p-2.5 z-10;
+  @apply flex justify-between items-center;
+  @apply text-black font-mono text-right text-xs sm:text-sm;
+  background: transparent;
+}
+
+.fab-group {
+  @apply absolute z-10 -top-2 -translate-y-full flex flex-col gap-2;
+}
+
+.fullscreen main footer {
+  @apply pb-10;
+}
+
+button {
+  @apply bg-white hover:bg-gray-200 flex items-center justify-center cursor-pointer shadow px-4 py-2 rounded-md text-sm uppercase;
+  color: var(--color-primary);
+}
+
+button.outlined {
+  @apply bg-transparent border border-black text-black shadow-none opacity-80 hover:opacity-100 active:opacity-100;
+}
+
+button.fab {
+  @apply rounded-full size-10 text-xl p-0;
+}
+
+/* loading */
+.loading {
+  @apply fixed top-0 w-full h-full z-20;
+  @apply flex flex-col gap-8 justify-center items-center;
+  @apply transition-[height] duration-700;
+  background-color: #ffffff;
+}
+
+.loading p {
+  @apply font-kablammo uppercase text-black text-6xl;
+  @apply opacity-100 transition-opacity;
+}
+
+.loading .progress {
+  @apply h-1.5 w-60 bg-black/15 overflow-hidden rounded-full opacity-100 transition-opacity;
+}
+
+.loading .progress > div {
+  @apply animate-progress origin-[0%_50%] h-full;
+  background-color: var(--color-primary);
+  filter: brightness(1.75);
+}
+
+.loading.end {
+  @apply h-0;
+}
+
+.loading.end p {
+  @apply opacity-0;
+}
+
+.loading.end .progress {
+  @apply opacity-0;
+}
+
+/* credits */
+.credits {
+  @apply fixed bottom-0 w-full h-0 z-20 overflow-hidden;
+  @apply transition-[height] duration-700;
+  background-color: #ffffff;
+}
+
+.credits .content {
+  @apply opacity-0 transition-opacity;
+  @apply flex flex-col items-center justify-center gap-4 w-full h-full px-4;
+  @apply text-white font-mono drop-shadow shadow-black;
+}
+
+.credits.open {
+  @apply h-full;
+}
+
+.credits.open .content {
+  @apply opacity-100;
+}
+
+.credits .content > div {
+  @apply flex gap-2 items-center text-right;
+}
+
+.credits .content > div:nth-child(even) {
+  @apply flex-row-reverse text-left;
+}
+
+.credits .content > div > span {
+  @apply text-sm;
+}
+
+.credits .content > div > span > span {
+  @apply text-xs whitespace-nowrap;
+}
+
+.credits .content img {
+  @apply size-14 group-hover:animate-sway group-active:animate-sway;
+}
+
+/* tutorial */
+.tutorial-overlay {
+  @apply fixed inset-0 justify-center items-center z-30;
+}
+
+.tutorial-overlay .tutorial-spotlight {
+  @apply bg-transparent rounded-full aspect-square outline-[10000px] transition-all duration-1500;
+  outline-color: transparent;
+}
+
+/* reset */
+#countdown {
+  @apply fixed z-10 -rotate-90 -scale-y-100;
+}
+
+#countdown circle {
+  @apply stroke-[20] fill-none;
+}
+
+/* shepherd customization  */
+.tutorial-step {
+  @apply rounded-none;
+}
+
+.tutorial-step:not(.ignore) {
+  @apply !top-[unset] !bottom-0 !left-0;
+}
+
+.tutorial-step .shepherd-text {
+  @apply text-center text-sm;
+}
+
+.tutorial-step.small .shepherd-text {
+  @apply text-left text-sm;
+}
+
+.tutorial-step .shepherd-footer {
+  @apply p-4 justify-center;
+}
+
+.fullscreen
+  .tutorial-step[data-popper-placement='bottom']:not(.shepherd-centered)
+  .shepherd-footer {
+  @apply pb-10;
+}
+
+.tutorial-step.shepherd-has-title .shepherd-content .shepherd-header {
+  @apply bg-white;
+}
+
+.tutorial-step.shepherd-has-title .shepherd-content .shepherd-header:has(h3 *) {
+  @apply font-tama flex pb-0;
+}
+
+.tutorial-step.shepherd-has-title .shepherd-content .shepherd-header > span {
+  @apply font-mono absolute top-4 text-xs;
+}
+
+.tutorial-step.shepherd-has-title .shepherd-content .shepherd-header .shepherd-title {
+  @apply font-tama justify-center;
+}
+
+.tutorial-step.shepherd-has-title .shepherd-content .shepherd-header .shepherd-title:has(*) {
+  @apply font-tama flex flex-col items-center;
+}
+
+.tutorial-step.shepherd-has-title .shepherd-content .shepherd-header .shepherd-title > div {
+  @apply flex;
+}
+
+.tutorial-step.shepherd-has-title .shepherd-content .shepherd-header .shepherd-title img {
+  @apply size-8;
+}
+
+.tutorial-step .shepherd-button {
+  @apply px-4;
+}
+
+.tutorial-step .shepherd-button:not(.shepherd-button-secondary) {
+  @apply bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/80;
+}

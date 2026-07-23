@@ -1,0 +1,287 @@
+[
+  {
+    "key": "jp-red",
+    "title": "Pocket Monsters Aka",
+    "release": "JP 1996-02 (DMG-APAJ)",
+    "cartridgeType": "JpRed",
+    "sourceImage": "jp-red.png",
+    "sourceUrl": "https://gbhwdb.gekkio.fi/static/DMG-APAJ-1/gdsn-1_01_front.jpg",
+    "shellColor": "#8d8485",
+    "labelCrop": {
+      "left": 0.155,
+      "top": 0.29,
+      "width": 0.72,
+      "height": 0.575
+    },
+    "outputs": {
+      "standard": "baked-cartridge-jp-red.jpg",
+      "inPocket": "baked-cartridge-jp-red-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "jp-green",
+    "title": "Pocket Monsters Midori",
+    "release": "JP 1996-02 (DMG-APCJ)",
+    "cartridgeType": "JpGreen",
+    "sourceImage": "jp-green.png",
+    "sourceUrl": "https://gbhwdb.gekkio.fi/static/DMG-APBJ-1/max-m-1_01_front.jpg",
+    "shellColor": "#8a8a8a",
+    "labelCrop": {
+      "left": 0.15,
+      "top": 0.3,
+      "width": 0.71,
+      "height": 0.56
+    },
+    "outputs": {
+      "standard": "baked-cartridge-jp-green.jpg",
+      "inPocket": "baked-cartridge-jp-green-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "jp-blue",
+    "title": "Pocket Monsters Ao",
+    "release": "JP 1996-10 (DMG-APEJ)",
+    "cartridgeType": "JpBlue",
+    "sourceImage": "jp-blue.png",
+    "sourceUrl": "https://gbhwdb.gekkio.fi/static/DMG-APEJ-0/kay-kidoutai-1_01_front.jpg",
+    "shellColor": "#919191",
+    "labelCrop": {
+      "left": 0.17,
+      "top": 0.28,
+      "width": 0.71,
+      "height": 0.57
+    },
+    "outputs": {
+      "standard": "baked-cartridge-jp-blue.jpg",
+      "inPocket": "baked-cartridge-jp-blue-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "jp-pikachu",
+    "title": "Pocket Monsters Pikachu",
+    "release": "JP 1998-09 (DMG-APSJ)",
+    "cartridgeType": "JpPikachu",
+    "sourceImage": "jp-pikachu.png",
+    "sourceUrl": "https://gbhwdb.gekkio.fi/static/DMG-APSJ-0/hdr-2_01_front.jpg",
+    "shellColor": "#909091",
+    "labelCrop": {
+      "left": 0.16,
+      "top": 0.28,
+      "width": 0.74,
+      "height": 0.58
+    },
+    "outputs": {
+      "standard": "baked-cartridge-jp-pikachu.jpg",
+      "inPocket": "baked-cartridge-jp-pikachu-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "us-red",
+    "title": "Pokemon Red Version",
+    "release": "US 1998-09 (DMG-APAE)",
+    "cartridgeType": "UsRed",
+    "sourceImage": "us-red.png",
+    "sourceUrl": "https://archives.bulbagarden.net/media/upload/1/11/Pokemon_Red_cartridge.png",
+    "shellColor": "#b0332c",
+    "labelCrop": {
+      "left": 0.125,
+      "top": 0.297,
+      "width": 0.75,
+      "height": 0.552
+    },
+    "outputs": {
+      "standard": "baked-cartridge-us-red.jpg",
+      "inPocket": "baked-cartridge-us-red-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "us-blue",
+    "title": "Pokemon Blue Version",
+    "release": "US 1998-09 (DMG-APEE)",
+    "cartridgeType": "UsBlue",
+    "sourceImage": "us-blue.png",
+    "sourceUrl": "https://archives.bulbagarden.net/media/upload/7/7a/Pokemon_Blue_cartridge.png",
+    "shellColor": "#2a368a",
+    "labelCrop": {
+      "left": 0.125,
+      "top": 0.297,
+      "width": 0.75,
+      "height": 0.552
+    },
+    "outputs": {
+      "standard": "baked-cartridge-us-blue.jpg",
+      "inPocket": "baked-cartridge-us-blue-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "pinball",
+    "title": "Pokemon Pinball",
+    "release": "US 1999-06, Rumble Pak (DMG-VPHE)",
+    "cartridgeType": "Pinball",
+    "sourceImage": "pinball.png",
+    "sourceUrl": "https://gbhwdb.gekkio.fi/static/DMG-VPHE-0/gekkio-1_01_front.jpg",
+    "shellColor": "#191f23",
+    "labelCrop": {
+      "left": 0.06,
+      "top": 0.03,
+      "width": 0.88,
+      "height": 0.24
+    },
+    "outputs": {
+      "standard": "baked-cartridge-pinball.jpg",
+      "inPocket": "baked-cartridge-pinball-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "us-yellow",
+    "title": "Pokemon Yellow Version",
+    "release": "US 1999-10 (DMG-APSE)",
+    "cartridgeType": "UsYellow",
+    "sourceImage": "us-yellow.png",
+    "sourceUrl": "https://archives.bulbagarden.net/media/upload/e/e4/Pokemon_Yellow_cartridge.png",
+    "shellColor": "#e8a825",
+    "labelCrop": {
+      "left": 0.125,
+      "top": 0.297,
+      "width": 0.75,
+      "height": 0.552
+    },
+    "outputs": {
+      "standard": "baked-cartridge-us-yellow.jpg",
+      "inPocket": "baked-cartridge-us-yellow-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "jp-gold",
+    "title": "Pocket Monsters Kin",
+    "release": "JP 1999-11 (DMG-AAUJ)",
+    "cartridgeType": "JpGold",
+    "sourceImage": "jp-gold.png",
+    "sourceUrl": "https://gbhwdb.gekkio.fi/static/DMG-AAUJ-1/gekkio-1_01_front.jpg",
+    "shellColor": "#242258",
+    "labelCrop": {
+      "left": 0.14,
+      "top": 0.29,
+      "width": 0.75,
+      "height": 0.58
+    },
+    "outputs": {
+      "standard": "baked-cartridge-jp-gold.jpg",
+      "inPocket": "baked-cartridge-jp-gold-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "jp-silver",
+    "title": "Pocket Monsters Gin",
+    "release": "JP 1999-11 (DMG-AAXJ)",
+    "cartridgeType": "JpSilver",
+    "sourceImage": "jp-silver.png",
+    "sourceUrl": "https://gbhwdb.gekkio.fi/static/DMG-AAXJ-0/gdsn-1_01_front.jpg",
+    "shellColor": "#4b464d",
+    "labelCrop": {
+      "left": 0.14,
+      "top": 0.29,
+      "width": 0.74,
+      "height": 0.57
+    },
+    "outputs": {
+      "standard": "baked-cartridge-jp-silver.jpg",
+      "inPocket": "baked-cartridge-jp-silver-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "tcg",
+    "title": "Pokemon Trading Card Game",
+    "release": "US 2000-04 (DMG-AXQE)",
+    "cartridgeType": "Tcg",
+    "sourceImage": "tcg.png",
+    "sourceUrl": "https://archives.bulbagarden.net/media/upload/2/2f/Pokemon_Trading_Card_Game.jpg",
+    "shellColor": "#1b1e20",
+    "labelCrop": {
+      "left": 0.12,
+      "top": 0.28,
+      "width": 0.76,
+      "height": 0.6
+    },
+    "outputs": {
+      "standard": "baked-cartridge-tcg.jpg",
+      "inPocket": "baked-cartridge-tcg-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "us-gold",
+    "title": "Pokemon Gold Version",
+    "release": "US 2000-10 (DMG-AAUE)",
+    "cartridgeType": "UsGold",
+    "sourceImage": "us-gold.png",
+    "sourceUrl": "https://archives.bulbagarden.net/media/upload/2/2e/Pokemon_Gold_cartridge.png",
+    "shellColor": "#a8892f",
+    "labelCrop": {
+      "left": 0.138,
+      "top": 0.318,
+      "width": 0.725,
+      "height": 0.556
+    },
+    "outputs": {
+      "standard": "baked-cartridge-us-gold.jpg",
+      "inPocket": "baked-cartridge-us-gold-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "us-silver",
+    "title": "Pokemon Silver Version",
+    "release": "US 2000-10 (DMG-AAXE)",
+    "cartridgeType": "UsSilver",
+    "sourceImage": "us-silver.png",
+    "sourceUrl": "https://archives.bulbagarden.net/media/upload/a/ac/Pokemon_Silver_cartridge.png",
+    "shellColor": "#c0bab2",
+    "labelCrop": {
+      "left": 0.138,
+      "top": 0.32,
+      "width": 0.725,
+      "height": 0.556
+    },
+    "outputs": {
+      "standard": "baked-cartridge-us-silver.jpg",
+      "inPocket": "baked-cartridge-us-silver-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "puzzle",
+    "title": "Pokemon Puzzle Challenge",
+    "release": "US 2000-12 (CGB-BPNE)",
+    "cartridgeType": "Puzzle",
+    "sourceImage": "puzzle.png",
+    "sourceUrl": "https://retrospekt.com/cdn/shop/products/puzzle1.jpg",
+    "shellColor": "#132f19",
+    "labelCrop": {
+      "left": 0.21,
+      "top": 0.34,
+      "width": 0.63,
+      "height": 0.52
+    },
+    "outputs": {
+      "standard": "baked-cartridge-puzzle.jpg",
+      "inPocket": "baked-cartridge-puzzle-in-pocket.jpg"
+    }
+  },
+  {
+    "key": "us-crystal",
+    "title": "Pokemon Crystal Version",
+    "release": "US 2001-07 (CGB-BYTE)",
+    "cartridgeType": "UsCrystal",
+    "sourceImage": "us-crystal.png",
+    "sourceUrl": "https://archives.bulbagarden.net/media/upload/9/94/Pokemon_Crystal_cartridge.png",
+    "shellColor": "#96baba",
+    "labelCrop": {
+      "left": 0.138,
+      "top": 0.328,
+      "width": 0.724,
+      "height": 0.561
+    },
+    "outputs": {
+      "standard": "baked-cartridge-us-crystal.jpg",
+      "inPocket": "baked-cartridge-us-crystal-in-pocket.jpg"
+    }
+  }
+]

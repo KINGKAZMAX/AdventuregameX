@@ -1,0 +1,74 @@
+[
+  {
+    "key": "tobu",
+    "title": "TOBU TOBU GIRL",
+    "genre": "ARCADE PLATFORMER",
+    "author": "TANGRAM GAMES",
+    "license": "MIT + CC BY 4.0",
+    "cartridgeType": "UsYellow",
+    "romFile": "tobutobugirl.gb"
+  },
+  {
+    "key": "ucity",
+    "title": "MICRO CITY",
+    "genre": "CITY BUILDER",
+    "author": "ANTONIOND",
+    "license": "GPL-3.0-or-later",
+    "cartridgeType": "JpGold",
+    "romFile": "ucity.gbc"
+  },
+  {
+    "key": "2048",
+    "title": "2048",
+    "genre": "SLIDING PUZZLE",
+    "author": "SANQUI",
+    "license": "Zlib",
+    "cartridgeType": "JpSilver",
+    "romFile": "2048.gb"
+  },
+  {
+    "key": "wordyl",
+    "title": "GB WORDYL",
+    "genre": "WORD PUZZLE",
+    "author": "BBBBBR",
+    "license": "GPL-3.0",
+    "cartridgeType": "UsCrystal",
+    "romFile": "gb-wordyl.gb"
+  },
+  {
+    "key": "carazu",
+    "title": "CARAZU",
+    "genre": "ACTION ADVENTURE",
+    "author": "MHOLTKAMP",
+    "license": "GPL-3.0",
+    "cartridgeType": "UsGold",
+    "romFile": "carazu.gb"
+  },
+  {
+    "key": "geometrix",
+    "title": "GEOMETRIX",
+    "genre": "MATCH PUZZLE",
+    "author": "ANTONIOND",
+    "license": "GPL-3.0-or-later",
+    "cartridgeType": "Puzzle",
+    "romFile": "geometrix.gbc"
+  },
+  {
+    "key": "gbcorp",
+    "title": "GB CORP.",
+    "genre": "IDLE BUSINESS",
+    "author": "DR. LUDOS",
+    "license": "MIT",
+    "cartridgeType": "Tcg",
+    "romFile": "gbcorp.gb"
+  },
+  {
+    "key": "shock-lobster",
+    "title": "SHOCK LOBSTER",
+    "genre": "ACTION",
+    "author": "DAVE VANEE",
+    "license": "Zlib",
+    "cartridgeType": "UsSilver",
+    "romFile": "shock-lobster.gb"
+  }
+]

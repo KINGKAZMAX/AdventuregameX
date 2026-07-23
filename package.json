@@ -1,0 +1,30 @@
+{
+  "name": "gamex-hub",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/prepare-apps.mjs public && vite --host 0.0.0.0 --port 5180",
+    "build": "node scripts/build-all.mjs",
+    "build:hub": "vite build",
+    "build:game-boy": "npm --prefix apps/game-boy run build",
+    "build:dammagotchi": "npm --prefix apps/dammagotchi run build",
+    "preview": "vite preview --host 0.0.0.0 --port 5180",
+    "verify:structure": "node scripts/verify-structure.mjs",
+    "verify:hub-accent": "node scripts/verify-hub-accent.mjs",
+    "verify:game-boy-language-switch": "node scripts/verify-game-boy-language-switch.mjs",
+    "verify:game-boy-lcd-updates": "node scripts/verify-game-boy-lcd-updates.mjs",
+    "verify:game-boy-pixi-runtime": "node scripts/verify-game-boy-pixi-runtime.mjs",
+    "verify:hub-preview-frame": "node scripts/verify-hub-preview-frame.mjs",
+    "verify:game-boy-render-scale": "node scripts/verify-game-boy-render-scale.mjs",
+    "verify:homebrew-cartridges": "node scripts/verify-homebrew-cartridges.mjs",
+    "verify:cartridge-layout": "node scripts/verify-cartridge-layout.mjs",
+    "verify:game-boy-no-intro-text": "node scripts/verify-game-boy-no-intro-text.mjs",
+    "verify:dammagotchi-localized-home": "node scripts/verify-dammagotchi-localized-home.mjs"
+  },
+  "dependencies": {
+    "@vitejs/plugin-basic-ssl": "^2.1.0",
+    "vite": "^6.0.11"
+  },
+  "devDependencies": {}
+}

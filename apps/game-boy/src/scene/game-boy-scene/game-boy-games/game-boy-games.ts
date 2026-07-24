@@ -260,7 +260,6 @@ export default class GameBoyGames {
       GAME_TYPE.Tetris,
       GAME_TYPE.SpaceInvaders,
       GAME_TYPE.Emulator,
-      GAME_TYPE.PocketCreatures,
     ];
 
     activeGames.forEach((gameType: string) => {

@@ -241,3 +241,84 @@ Game Boy lineup in version-matched colours: Red, Blue, Yellow, Green, Gold, Silv
   uniform ~17-18% fanned edge (was 94%), zero viewport clipping. Confirmed visually in
   the raw app and the Hub (1280×720): clean symmetric wreath, all 15 readable.
 - tsc clean; probe removed (no leak into builds); `npm run build` green; 11/11 verify:*.
+
+## 2026-07-24 — Cartridge/game/play/save integrity audit
+
+- Audited all 17 selectable cartridges against the cartridge/game configs,
+  bundled ROM headers, and the live Game Boy app.
+- Current acceptance result: **0/17 cartridges satisfy all three requirements
+  simultaneously** (label matches runtime game, playable, persistent save/load).
+- Seven visible Pokémon cartridges (`JpRed` through `Pinball`) launch only the
+  `PocketCreatures` version splash. They are not complete games and expose no save.
+- Eight visible Pokémon cartridges launch real open-source homebrew games through
+  WasmBoy. Browser boot/input/save/load checks passed for Tobu Tobu Girl, µCity,
+  2048, GB Corp., Carazu, Shock Lobster, Geometrix, and GB Wordyl, but every
+  Pokémon cartridge label mismatches the game it launches.
+- ROM-header audit: seven of the eight homebrew ROMs declare RAM+battery support;
+  `gb-wordyl.gb` is ROM-only. All eight still support GameX manual save states.
+- `Tetris` and `Space Invaders` correctly match their storage cartridge names and
+  are playable, but neither has persistent save/load wiring.
+- Live browser evidence: the emulator Save state / Load state controls returned
+  `Saved` / `Loaded`; no new console warnings or errors were emitted.
+- Root cause is a data/product-model mismatch, not an emulator failure: official
+  Pokémon sleeve identity and unrelated legal homebrew runtime identity were
+  intentionally combined in the same cartridge records.
+- Legal constraint: GameX must not download or redistribute commercial Pokémon
+  ROMs. Exact Pokémon gameplay can only be offered through a user-supplied,
+  legally dumped ROM flow; an out-of-box collection must instead use cartridge
+  labels that truthfully match redistributable games.
+
+## 2026-07-24 — Open-homebrew completion candidate audit
+
+- Searched primary project repositories and official GitHub releases for
+  redistributable GB/GBC games with explicit licenses. Ten release ROMs were
+  downloaded to an isolated temporary directory for evaluation; no candidate
+  ROM was added to the product tree.
+- All ten candidate ROMs passed Nintendo-logo, header-checksum, and global-checksum
+  validation and booted/rendered in GameX's vendored WasmBoy 0.7.1 core.
+- Save persistence was tested with the same sequence the product uses: boot,
+  input, create save state, persist cartridge, reload the browser page, find the
+  cartridge-scoped state, load it, and resume emulation. All ten passed.
+- Three candidates also expose native battery RAM in their ROM headers:
+  Adjustris (MBC3+RAM+BATTERY), Breksta's Cat (MBC3+RTC+RAM+BATTERY), and
+  CrossConnect (MBC5+RAM+BATTERY). The remaining candidates are ROM-only but
+  still pass GameX's emulator-state save/load flow.
+- Technically verified shortlist for the seven missing display cartridges:
+  Adjustris (CC0-1.0), Breksta's Cat (GPL-3.0), AIRPLANZ (GPL-3.0),
+  CrossConnect (MIT), Wyrmhole (MIT), Unstoppable Knight (MIT), and
+  Dyson's Fear / Don't Panic! (GPL-3.0). Their official release ROMs all boot,
+  accept controls, save, reload, and resume.
+- Additional verified fallbacks: Max Pirate (MIT), Dino Boy (MIT), and Pocket
+  League (MIT). Max Pirate uses a separately sourced commercial asset pack;
+  Dino Boy and Pocket League explicitly describe themselves as ports/clones of
+  third-party games, so they are not preferred for GameX's default collection.
+- Proposed truthful 15-game collection, preserving the current wreath order:
+  Adjustris; Breksta's Cat; AIRPLANZ; CrossConnect; Wyrmhole; Unstoppable
+  Knight; Dyson's Fear; Tobu Tobu Girl; µCity; 2048; GB Corp.; Carazu;
+  Shock Lobster; Geometrix; GB Wordyl.
+- Implementation should separate stable layout slots from game identity, replace
+  every Pokémon sleeve with a label for the ROM it actually launches, add the
+  seven release ROMs and required license/attribution notices, and expose the
+  existing manual Save/Load controls uniformly for all 15.
+- Temporary browser harness and candidate ROM copies were removed after the
+  audit. Existing product files and user saves were not replaced or cleared.
+
+## 2026-07-25 — Matching-cartridge design approved and revised
+
+- User approved the truthful-label direction: preserve the 1996–2001 cartridge
+  colour palette and label-era visual language, but replace every title with the
+  real open-source game name.
+- Wrote and committed the implementation design at
+  `docs/superpowers/specs/2026-07-24-open-homebrew-matching-cartridges-design.md`
+  (`37501c0`).
+- User confirmed the written specification with one preservation requirement:
+  existing cartridges must not be removed and may instead be collected in
+  storage.
+- Revised the design to keep Tetris and Space Invaders in an `Archive` group,
+  still insertable and playable. The main wreath remains exactly 15 truthful
+  open-ROM cartridges, while final play/save/load acceptance covers 17/17.
+- Both built-in games now have an exact save contract in the specification:
+  versioned local-storage snapshots, schema validation, transactional restore,
+  and routing through the same Save/Load controls as WasmBoy games.
+- Next gate: write and self-check the TDD implementation plan, then execute it
+  inline.

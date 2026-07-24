@@ -1,18 +1,20 @@
 # GameX 开源游戏匹配卡带设计规格
 
 - 日期：2026-07-24
-- 状态：对话设计已由用户确认，等待书面规格审阅
+- 修订：2026-07-25
+- 状态：设计与书面规格已由用户确认，进入实现计划
 - 适用范围：GameX 的 Game Boy 场景
 
 ## 目标
 
-将当前卡带收藏改造成 15 张可直接游玩的开源 GB/GBC 卡带，并保证每一张都同时满足：
+将主陈列改造成 15 张可直接游玩的开源 GB/GBC 卡带，并把现有 Tetris 与 Space Invaders 卡带完整保留在收纳区。最终 17 张卡带都必须同时满足：
 
 1. 卡带标签的大标题与实际启动游戏完全一致；
 2. 插入后进入完整、可操作的游戏，而不是展示画面；
 3. 使用同一套 Save state / Load state 控件保存并恢复；
-4. 保留 1996–2001 年掌机卡带的配色、印刷质感与标签构图；
-5. 不继续使用 Pokémon 名称、Logo、角色、官方标签扫描或商业 ROM。
+4. 主陈列保留 1996–2001 年掌机卡带的配色、印刷质感与标签构图；
+5. 主陈列不继续使用 Pokémon 名称、Logo、角色、官方标签扫描或商业 ROM；
+6. 两张旧卡带不删除、不改名，继续使用原生 Pixi 游戏，并从同一 Save / Load 控件保存和恢复。
 
 ## 已批准的视觉方向
 
@@ -27,7 +29,7 @@
 
 标准贴纸与插入机身后的暗色贴纸由同一份 SVG 标签生成，避免两套资源发生标题偏差。
 
-## 最终卡带集合
+## 最终主陈列卡带
 
 卡带顺序沿用现有马蹄形布局，从左下向上再到右下。壳体颜色沿用当前 15 个槽位。
 
@@ -49,6 +51,15 @@
 | 14 | `Geometrix` | GEOMETRIX | `geometrix.gbc` | GPL-3.0-or-later | Puzzle 深绿 |
 | 15 | `GbWordyl` | GB WORDYL | `gb-wordyl.gb` | GPL-3.0 | US Crystal 水晶蓝 |
 
+## 收纳区旧卡带
+
+| 卡带 ID | 标签标题 | 运行方式 | 存档方式 | 陈列位置 |
+|---|---|---|---|---|
+| `Tetris` | TETRIS | 原生 Pixi 游戏 | 版本化 JSON 快照 | 收纳区 |
+| `SpaceInvaders` | SPACE INVADERS | 原生 Pixi 游戏 | 版本化 JSON 快照 | 收纳区 |
+
+两张旧卡带继续从控制面板的 `Archive` 分组插入。它们不占用主陈列的 15 个位置，但属于 17/17 完整验收范围。
+
 ## 新增 ROM 的固定来源
 
 实现只使用作者 GitHub Release 发布的下列文件，并在写入仓库前校验 SHA-256：
@@ -65,7 +76,7 @@
 
 ## 数据与组件边界
 
-### 1. 单一卡带清单
+### 1. 主陈列卡带清单
 
 `apps/game-boy/tools/homebrew-cartridges.json` 扩展为 15 项，成为标题、ROM、作者、许可证、来源、壳色、标签主题和纹理输出名的唯一事实来源。
 
@@ -84,11 +95,11 @@
 
 全部 15 张卡带映射到 `GAME_TYPE.Emulator`。`PocketCreatures` 不再进入活动游戏集合，也不再有任何卡带指向它。
 
-### 3. 移除两张隐藏卡带
+### 3. 保留两张收纳卡带
 
-`Tetris` 与 `SpaceInvaders` 目前是可从控制面板插入的隐藏卡带，但不支持统一的模拟器状态存档。它们从 `CARTRIDGE_TYPE`、卡带配置和可选卡带菜单中移除，因此最终可选卡带总数固定为 15。
+`Tetris` 与 `SpaceInvaders` 保留在 `CARTRIDGE_TYPE`、卡带配置和控制面板中。它们继续停放在现有舞台外收纳坐标，并归入独立的 `Archive` 分组，避免与 15 张主陈列卡带混淆。
 
-原生 Tetris / Space Invaders 游戏代码可以留作内部历史代码，但不能再通过用户界面作为卡带启动，也不能计入验收集合。
+两张卡带插入后继续启动现有原生游戏。它们必须实现原生快照接口，不能因为不是 ROM 而绕过 Save / Load 验收。
 
 ### 4. 标签生成器
 
@@ -106,11 +117,13 @@
 
 长按信息卡的标题、说明、作者、许可证和源代码链接全部来自真实游戏。`release` 字段改为开源版本信息，例如 `Open homebrew · v1.1 · 2017`，不再出现 `Sleeve: Pokémon ...`。
 
-所有 15 项的 `kind` 均为 `emulator`。
+主陈列 15 项的 `kind` 均为 `emulator`。收纳区两项保留 `builtin`，信息卡明确显示 `Archive · GameX built-in`，不显示开源 ROM 版本。
 
 ### 6. 统一存档
 
-继续使用 WasmBoy 现有流程：
+`GameBoyGames` 对外提供 `saveCurrentGameState()` 与 `loadCurrentGameState()`。控制面板只调用这两个入口，再由当前卡带类型路由到 ROM 或原生游戏。
+
+15 张 ROM 卡带继续使用 WasmBoy 现有流程：
 
 1. `saveState()` 暂停模拟器并创建状态；
 2. `saveLoadedCartridge()` 将状态和电池 RAM 写入 IndexedDB；
@@ -119,7 +132,25 @@
 
 保存状态按 ROM 头部隔离。ROM-only 游戏也能使用模拟器状态存档；带 battery RAM 的游戏同时保存原生进度。
 
-Save / Load 在未运行游戏、没有存档或 IndexedDB 失败时继续显示明确状态，不伪报成功。
+两张原生游戏实现 `SaveableBuiltinGame<State>`：
+
+```ts
+interface SaveableBuiltinGame<State> {
+  captureState(): State;
+  restoreState(state: State): boolean;
+}
+```
+
+原生快照通过 `BuiltinSaveStore` 写入版本化 `localStorage` 键：
+
+- `gamex:builtin-save:TETRIS:v1`；
+- `gamex:builtin-save:SPACE_INVADERS:v1`。
+
+Tetris 快照包含当前画面、棋盘格、当前与下一个方块、方块坐标和朝向、下落计时、行数、分数、等级、暂停和结束状态。保存前把消行动画归一化到动画结束后的稳定棋盘，读档后从该稳定状态继续。
+
+Space Invaders 快照包含当前画面、回合、玩家位置和移动状态、生命、分数、敌人网格与运动状态、双方飞弹和射击冷却。保存前把爆炸与延迟删除归一化到最终存活状态，读档后重建实体并继续更新。
+
+Save / Load 在未运行游戏、没有存档、版本不兼容、IndexedDB 或 `localStorage` 失败时显示明确状态，不伪报成功。旧版本或损坏的 JSON 返回 `Load failed`，不覆盖当前游戏状态。
 
 ## 许可证交付
 
@@ -137,6 +168,7 @@ Wyrmhole、CrossConnect、Unstoppable Knight 等含第三方字体、音乐或�
 - 保存失败：控制面板显示 `Save failed`；
 - 没有存档：显示 `No save state`；
 - 读档失败：显示 `Load failed`；
+- 原生快照版本不匹配或结构校验失败：显示 `Load failed`，游戏保持读档前状态；
 - 标签生成失败：构建脚本退出非零，不保留半套新图集作为通过结果。
 
 ## TDD 与自动验证
@@ -146,40 +178,45 @@ Wyrmhole、CrossConnect、Unstoppable Knight 等含第三方字体、音乐或�
 1. 清单必须正好 15 项，游戏 ID、标题、ROM 文件和纹理输出均唯一；
 2. 每项均映射 `GAME_TYPE.Emulator`；
 3. 运行时不存在 Pokémon 卡带 ID、`PocketCreatures` 映射、显示型卡带或 Pokémon 袖套文案；
-4. 不存在 Tetris / Space Invaders 可选卡带；
+4. Tetris / Space Invaders 仍存在于收纳区和 `Archive` 菜单；
 5. 每个 ROM 存在、SHA-256 与清单一致、Nintendo Logo 和两个校验和有效；
 6. 每项有标准与 in-pocket 1024×1024 图集；
 7. 标签生成器不读取 Pokémon 扫描图且不联网；
 8. 每项有完整署名和许可证文件，GPL 项有源码归档；
-9. 15 项全部具备 Save / Load 运行时路径。
+9. 15 个 ROM 均具备 WasmBoy Save / Load 路径；
+10. 两个原生游戏具备版本化快照、结构校验和失败不变性测试；
+11. 控制面板只调用统一的 `saveCurrentGameState()` / `loadCurrentGameState()`。
 
-红灯原因必须是当前产品仍有 8 项清单、7 张展示卡、Pokémon 标签和两张无统一存档的隐藏卡，而不是测试脚本错误。
+红灯原因必须是当前产品仍有 8 项清单、7 张展示卡、Pokémon 标签，以及两张尚未实现原生快照的收纳卡，而不是测试脚本错误。
 
 ## 浏览器逐卡验收
 
-对 15 张卡带逐一执行独立场景，避免存档和模拟器上下文串扰：
+对 17 张卡带逐一执行独立场景，避免存档和游戏上下文串扰：
 
 1. 打开 Game Boy 页面并等待马蹄形陈列稳定；
 2. 截图确认标签标题可见且保持对应壳色；
-3. 插入该卡带，等待 ROM 启动；
+3. 插入该卡带，等待 ROM 或原生游戏启动；
 4. 发送 `START`、方向键和 `A/B` 的短输入序列；
-5. 确认画面响应且无 `LOAD ERROR`；
+5. 确认画面响应；ROM 卡不得出现 `LOAD ERROR`；
 6. 保存状态并确认 `Saved`；
 7. 刷新页面，重新插入同一卡带；
 8. 读取状态并确认 `Loaded`，模拟器恢复运行；
 9. 检查控制台没有新增错误；
-10. 为每款保留启动后和读档后的截图证据。
+10. 为每款保留启动后和读档后的截图证据；
+11. 对 Tetris 验证棋盘、当前方块、分数和等级恢复；
+12. 对 Space Invaders 验证回合、玩家、生命、分数和敌人阵列恢复。
 
-最后运行 TypeScript、所有 `verify:*`、Game Boy 子应用构建、Hub 完整构建，并确认同步后的 `public/game-boy` 仍包含 15 个 ROM、纹理、许可证和 GPL 源码归档。
+最后运行 TypeScript、所有 `verify:*`、Game Boy 子应用构建、Hub 完整构建，并确认同步后的 `public/game-boy` 仍包含 15 个 ROM、纹理、许可证和 GPL 源码归档，收纳区两张原生卡带仍可插入。
 
 ## 完成标准
 
 只有以下证据同时成立才算完成：
 
-- 可选卡带数量恰好为 15；
+- 主陈列卡带数量恰好为 15，收纳区卡带数量恰好为 2；
 - 15/15 的标签标题与 ROM 配置一致；
-- 15/15 能启动并响应输入；
-- 15/15 能跨页面保存、读档并继续运行；
+- 17/17 能启动并响应输入；
+- 17/17 能跨页面保存、读档并继续运行；
 - 15/15 的信息卡与许可证资料真实对应；
+- Tetris 与 Space Invaders 的信息卡、标签和原生游戏名称一致；
 - 所有自动验证与完整构建通过；
 - 逐卡截图和控制台记录未发现漏项或新错误。

@@ -372,3 +372,30 @@ Game Boy lineup in version-matched colours: Red, Blue, Yellow, Green, Gold, Silv
 - The query-gated acceptance bridge used to collect runtime state was removed
   from product code after evidence capture. The final release build contains no
   acceptance-only hook.
+
+## 2026-07-25 — Matching-cartridge final verification
+
+- Final fresh test run: `npm --prefix apps/game-boy test` passed 4 files and
+  29/29 tests with 0 failures.
+- Final Game Boy build: `npm --prefix apps/game-boy run build` passed TypeScript
+  compilation and Vite production bundling.
+- Final repository regression: all 11 `verify:*` scripts exited 0.
+- Final full build: `npm run build` rebuilt Game Boy, Dammagotchi, and the Hub,
+  synchronized the ignored `public` release tree, and exited 0.
+- Release-tree inventory:
+  - 15 active manifest entries and exactly 15 published GB/GBC ROMs;
+  - 2 preserved Archive cartridges (Tetris and Space Invaders);
+  - 30/30 unique active label textures (standard + in-pocket), with retained
+    legacy assets left unreferenced rather than deleted;
+  - 15/15 license files and normalized title matches in `ATTRIBUTION.md`;
+  - 7 GPL-family source archives, already covered by the checksum/source audit;
+  - 17/17 browser play/save/refresh/load/continue results with 0 errors.
+- Final browser evidence:
+  `tmp/gamex-cartridge-acceptance.json` and
+  `tmp/gamex-cartridge-acceptance.html`.
+- Known non-blocking build warnings remain unchanged: unresolved stylesheet
+  font/keyboard-image URLs that are resolved at runtime, third-party Three.js
+  helper bundles containing `eval`, and Vite chunk-size advisories. No warning
+  caused a build or runtime acceptance failure.
+- Worktree boundary check: no user research JSON or unrelated submission
+  document was staged or committed by this branch.

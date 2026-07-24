@@ -322,3 +322,30 @@ Game Boy lineup in version-matched colours: Red, Blue, Yellow, Green, Gold, Silv
   and routing through the same Save/Load controls as WasmBoy games.
 - Next gate: write and self-check the TDD implementation plan, then execute it
   inline.
+
+## 2026-07-25 — Truthful cartridge collection automated acceptance
+
+- Replaced the active Pokémon-labelled mismatch set with 15 original labels whose
+  titles, cartridge configs, emulator configs, bundled ROMs, attribution records,
+  license texts, and source archives all identify the same open-source games.
+- Kept the existing Tetris and Space Invaders cartridges in a separate `Archive`
+  group. Both remain insertable and playable, so the product inventory is 15
+  open-ROM cartridges plus 2 preserved built-in cartridges.
+- Added one Save/Load entry point for all 17 cartridges. WasmBoy games retain
+  cartridge-scoped emulator snapshots; Tetris and Space Invaders use validated,
+  versioned, transactional snapshots under
+  `gamex:builtin-save:TETRIS:v1` and
+  `gamex:builtin-save:SPACE_INVADERS:v1`.
+- Automated save-state coverage: 4 Vitest files, 29/29 tests passed. The tests
+  cover store envelopes and failure handling, three-way routing, exact built-in
+  keys, Tetris board/gameplay validation, and Space Invaders player/enemy/missile
+  validation.
+- Full repository build passed and synchronized `public/game-boy` through
+  `scripts/build-all.mjs`; no release files were copied by hand.
+- Repository regression: 11/11 `verify:*` scripts passed, including the truthful
+  15 + 2 inventory, ROM/header/checksum/license/source audit, cartridge layout,
+  Pixi runtime, LCD refresh, Hub frame, language bridge, and both application
+  shells.
+- Remaining release gate: browser acceptance must insert and play every
+  cartridge, exercise controls, save, refresh, reload, continue, inspect
+  screenshots, and record console errors for a final 17/17 report.

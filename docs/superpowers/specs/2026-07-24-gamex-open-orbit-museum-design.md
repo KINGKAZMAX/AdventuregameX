@@ -1,7 +1,7 @@
 # GameX 开放设备环形博物馆与 Air Control 设计规格
 
 - 日期：2026-07-24
-- 状态：设计已由用户确认，等待书面规格审阅
+- 状态：设计与书面规格已由用户确认，进入实现计划
 - 产品名称：GameX
 - 比赛主张：Playable Artifacts of Childhood
 - MVP 演示长度：120 秒
@@ -87,14 +87,16 @@
 
 | 编号 | 展品名 | 状态 | 开放模型来源 | 许可 | MVP 微交互 |
 | --- | --- | --- | --- | --- | --- |
-| 01 | Pocket Play | LIVE | [Game Boy Low-Poly / ItsKevin](https://sketchfab.com/3d-models/game-boy-3d-model-low-poly-7dadb04be00844119df5d3273740470b) | CC BY | 插卡、开机、按键、进入游戏 |
-| 02 | Pocket Care | LIVE | [Tamagotchi / N01516](https://sketchfab.com/3d-models/tamagotchi-2311779775cb42a5ac81c4a378af176e) | CC BY 4.0 | 孵化、照料、进入宠物运行时 |
-| 03 | Retro Learning Computer | SOON | [Retro Computer With Mouse And Keyboard / jampakdd](https://sketchfab.com/3d-models/retro-computer-with-mouse-and-keyboard-b0a0b822b3be444ab751414c657658c8) | CC BY | 键帽逐行点亮、学习卡悬浮入仓 |
+| 01 | Pocket Play | LIVE | 现有模型的固定字节，[Andrii Babintsev / Snokke](https://github.com/Snokke/game-boy-challenge) | MIT | 插卡、开机、按键、进入游戏 |
+| 02 | Pocket Care | LIVE | 现有程序化几何的固定源码，[Francesco Dammacco / dammafra](https://github.com/dammafra/dammagotchi) | AGPL-3.0-only | 孵化、照料、进入宠物运行时 |
+| 03 | Retro Learning Computer | SOON | [Keyboard / Poly by Google](https://poly.pizza/m/3oFfQCSsUmQ) | CC BY 3.0 | 键帽逐行点亮、学习卡悬浮入仓 |
 | 04 | Cartridge Home Console | SOON | [Videogame / Poly by Google](https://poly.pizza/m/7jHiQIMZkRs) | CC BY 3.0 | 仓门开合、双控制器呼吸 |
-| 05 | Wide Handheld | SOON | [Retro Handheld / Michael Fuchs](https://poly.pizza/m/2nwiJ7W4kkz) | CC BY | 摇杆视差、屏幕扫描信号 |
+| 05 | Wide Handheld | SOON | [Retro Handheld / Michael Fuchs](https://poly.pizza/m/2nwiJ7W4kkz) | CC BY 3.0 | 摇杆视差、屏幕扫描信号 |
 | 06 | Dual LCD Pocket | SOON | [Handheld videogame console / Poly by Google](https://poly.pizza/m/5kxD7n4F3lv) | CC BY 3.0 | 开盖、双屏显示不同段码 |
-| 07 | Block Matrix Handheld | SOON | [Tetris Brick Game / alikulovd4](https://sketchfab.com/3d-models/tetris-brick-game-1673b76dc0974dd58762e299fbdc3a00) | CC BY 4.0 | 点阵重组为 Coming Soon |
-| 08 | Arcade Terminal | SOON | [Arcade Machine / J-Toastie](https://poly.pizza/m/GLDkMhiynM) | CC BY | 摇杆轻摆、原创吸引画面 |
+| 07 | Block Matrix Handheld | SOON | [Handheld game console / Poly by Google](https://poly.pizza/m/fw194G1mJA9) | CC BY 3.0 | 点阵重组为 Coming Soon |
+| 08 | Arcade Terminal | SOON | [Arcade Machine / J-Toastie](https://poly.pizza/m/GLDkMhiynM) | CC BY 3.0 | 摇杆轻摆、原创吸引画面 |
+
+早期初选的 ItsKevin、N01516、jampakdd 与 alikulovd4 模型无法同时建立“不可变原始字节、全离线重建、去商标加工与许可证证据”的闭包，因此已按规则 5 换成上表可固定输入。替换只改变资产来源，不改变八个设备类别、LIVE/SOON 状态或既定 MVP 微交互。
 
 资产使用规则：
 
@@ -154,7 +156,7 @@ Air Control 作为演示加分路径：
 - 运行时门户。
 - 署名页。
 
-新增第 9 台设备只增加一条注册数据和对应资产，不改展馆核心架构。
+MVP 与本轮比赛发布门禁固定为正好 8 台；注册表、环形布局、控制器和玻璃导航原语均按 `records.length` 运行。未来版本把发布计数从 8 调整为新目标后，新增第 9 台设备只增加一条注册数据和对应资产，不改展馆核心架构。
 
 ### 6.4 Air Control
 
@@ -219,7 +221,8 @@ interactionHint
 - 渲染环形地面、8 个展台、设备模型、Memory Core 与氛围效果。
 - 在 FocusPortal 激活时保持挂载，但降低刷新率并暂停高成本效果。
 - 设备远景、中景和聚焦态使用不同 LOD。
-- 复杂模型不直接参与点击，统一使用不可见 proxy box 做 raycast。
+- 每台设备创建独立、不可见但可 raycast 的 proxy box；`Three.Raycaster` 只命中这些简单代理，复杂 GLB 永不直接参与点击。
+- 为每台设备保留屏幕 anchor，并提供 `focusExhibit(id)`、`restoreOverview()` 与 `getProjectedScreenRect(id)`（或严格等价 API），让门户层对齐相机投影后的设备屏幕。
 
 ### 7.3 AssetResolver
 
@@ -240,7 +243,8 @@ interactionHint
 - 拖拽改变环形方位。
 - 松手后吸附到最近展位。
 - 点击玻璃图标直接吸附目标方位。
-- 点击设备进入聚焦。
+- 指针移动不超过 6 CSS px、且 down/up 命中同一 proxy box 才判定为设备点击；超过阈值就是拖拽，不得误入聚焦。
+- 点击设备与点击玻璃图标都先选择并吸附目标方位；进入门户再执行相机聚焦。
 - `Escape` 退出门户并恢复进入前方位。
 - 减少动态模式关闭惯性和大幅相机推进。
 
@@ -448,7 +452,9 @@ CameraSession
 ### 14.1 单元测试
 
 - 注册表 8 项、唯一 ID、唯一方位和必填许可证字段。
+- 发布门禁仍锁定 8/8；另以至少 10 条 synthetic records 验证注册表、环形布局、控制器与玻璃导航不依赖硬编码八项，且导航溢出仍可访问。
 - 方位吸附、环形索引和返回原方位。
+- proxy-only Raycaster、6 px click-vs-drag 判定、相机聚焦/恢复和屏幕投影矩形。
 - 模型成功、许可失败、404 和超预算降级。
 - FocusPortal 状态机和同一时刻只允许一个运行时。
 - `postMessage` 版本、来源、序号和未知消息拒绝。
@@ -458,8 +464,9 @@ CameraSession
 ### 14.2 集成测试
 
 - 右上角 8 个图标与 8 个展位一一对应。
+- 点击 canvas 设备或右上图标都选择并吸附同一展位；复杂 GLB 不进入 Raycaster。
 - 拖拽、触摸、键盘和 Air Control 都驱动同一个 ExhibitController。
-- Pocket Play 与 Pocket Care 分别完成进入、ready、交互、memory、exit。
+- Pocket Play 与 Pocket Care 分别完成“吸附 → 相机聚焦 → 屏幕范围门户 → ready → 交互 → memory → exit → 全景恢复”。
 - 切换运行时前旧运行时完成 pause/销毁和释放输入。
 - 模型与子运行时失败时没有空白画面。
 - 减少动态与高对比开关覆盖核心路径。

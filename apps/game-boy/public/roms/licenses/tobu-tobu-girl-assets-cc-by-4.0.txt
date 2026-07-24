@@ -1,0 +1,13 @@
+Tobu Tobu Girl asset notice
+
+The upstream project states that all game assets — images, text, sound and
+music — are licensed under the Creative Commons Attribution 4.0 International
+License.
+
+Title: Tobu Tobu Girl
+Creator: Tangram Games
+Source: https://github.com/SimonLarsen/tobutobugirl
+License: https://creativecommons.org/licenses/by/4.0/
+
+This notice supplements the MIT code license in
+`tobu-tobu-girl-mit.txt`.

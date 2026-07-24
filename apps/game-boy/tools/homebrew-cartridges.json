@@ -1,21 +1,250 @@
 [
   {
-    "key": "tobu",
+    "key": "adjustris",
+    "title": "ADJUSTRIS",
+    "genre": "FALLING BLOCK PUZZLE",
+    "author": "DAVE VANEE",
+    "license": "CC0-1.0",
+    "version": "v1.1",
+    "year": 2017,
+    "cartridgeType": "Adjustris",
+    "romFile": "adjustris.gb",
+    "releaseUrl": "https://github.com/tbsp/Adjustris/releases/download/v1.1/adjustris.gb",
+    "sourceUrl": "https://github.com/tbsp/Adjustris/tree/v1.1",
+    "sha256": "b6c8affe6d906419cfc99ff459718f33a1868af03254a2f65cea2a9430394712",
+    "licenseFile": "adjustris-cc0-1.0.txt",
+    "shellColor": "#8d8485",
+    "outputs": {
+      "standard": "baked-cartridge-adjustris.jpg",
+      "inPocket": "baked-cartridge-adjustris-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#151b3d",
+      "accent": "#ffcf48",
+      "secondary": "#4de1c1",
+      "motif": "blocks",
+      "series": "GAMEX HOMEBREW"
+    }
+  },
+  {
+    "key": "brekstas-cat",
+    "title": "BREKSTA'S CAT",
+    "genre": "PUZZLE PLATFORMER",
+    "author": "NOTIMPLEMENTEDLIFE",
+    "license": "GPL-3.0",
+    "version": "1.3",
+    "year": 2021,
+    "cartridgeType": "BrekstasCat",
+    "romFile": "brekstascat.gb",
+    "releaseUrl": "https://github.com/NotImplementedLife/brekstascat/releases/download/1.3/brekstascat_1_3.gb",
+    "sourceUrl": "https://github.com/NotImplementedLife/brekstascat/tree/1.3",
+    "sha256": "e46dc09ce51b0bf3ca5c4539350ab7e2d4ea4d428329540605aa0a978ac3ece8",
+    "licenseFile": "brekstas-cat-gpl-3.0.txt",
+    "sourceArchive": "brekstas-cat-1.3-source.tar.gz",
+    "shellColor": "#8a8a8a",
+    "outputs": {
+      "standard": "baked-cartridge-brekstas-cat.jpg",
+      "inPocket": "baked-cartridge-brekstas-cat-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#25332c",
+      "accent": "#f3e0a5",
+      "secondary": "#e46c61",
+      "motif": "cat",
+      "series": "GAMEX HOMEBREW"
+    }
+  },
+  {
+    "key": "airplanz",
+    "title": "AIRPLANZ",
+    "genre": "ARCADE FLIGHT",
+    "author": "NOTIMPLEMENTEDLIFE",
+    "license": "GPL-3.0",
+    "version": "1.2",
+    "year": 2021,
+    "cartridgeType": "Airplanz",
+    "romFile": "airplanz.gb",
+    "releaseUrl": "https://github.com/NotImplementedLife/AIRPLANZ/releases/download/1.2/AIRPLANZ_1_2.gb",
+    "sourceUrl": "https://github.com/NotImplementedLife/AIRPLANZ/tree/1.2",
+    "sha256": "5cdc8d6d3fffe403083df240208082ba0b8d7390a4b8fa93f955904094b8d1ef",
+    "licenseFile": "airplanz-gpl-3.0.txt",
+    "sourceArchive": "airplanz-1.2-source.tar.gz",
+    "shellColor": "#919191",
+    "outputs": {
+      "standard": "baked-cartridge-airplanz.jpg",
+      "inPocket": "baked-cartridge-airplanz-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#173e5c",
+      "accent": "#f7dd66",
+      "secondary": "#e36452",
+      "motif": "flight",
+      "series": "GAMEX HOMEBREW"
+    }
+  },
+  {
+    "key": "cross-connect",
+    "title": "CROSS CONNECT",
+    "genre": "NETWORK PUZZLE",
+    "author": "QUINN PAINTER",
+    "license": "MIT",
+    "version": "1.0",
+    "year": 2022,
+    "cartridgeType": "CrossConnect",
+    "romFile": "cross-connect.gbc",
+    "releaseUrl": "https://github.com/QuinnPainter/CrossConnect/releases/download/1.0/CrossConnect.gbc",
+    "sourceUrl": "https://github.com/QuinnPainter/CrossConnect/tree/1.0",
+    "sha256": "5465e7b4aa37ee0d630d2e63a026f282e8d17c213a2bd9f087417e68061e8b95",
+    "licenseFile": "cross-connect-mit.txt",
+    "shellColor": "#909091",
+    "outputs": {
+      "standard": "baked-cartridge-cross-connect.jpg",
+      "inPocket": "baked-cartridge-cross-connect-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#302365",
+      "accent": "#f8ce46",
+      "secondary": "#5ee0f2",
+      "motif": "network",
+      "series": "GAMEX HOMEBREW"
+    }
+  },
+  {
+    "key": "dysons-fear",
+    "title": "DYSON'S FEAR",
+    "genre": "SURVIVAL ACTION",
+    "author": "ZETA0134",
+    "license": "GPL-3.0",
+    "version": "v2.0",
+    "year": 2019,
+    "cartridgeType": "DysonsFear",
+    "romFile": "dysons-fear.gb",
+    "releaseUrl": "https://github.com/zeta0134/ludum-dare-42/releases/download/v2.0/ludum-dare-42-v2.0.gb",
+    "sourceUrl": "https://github.com/zeta0134/ludum-dare-42/tree/v2.0",
+    "sha256": "37802cae4b5b6df5c13e5a1cac563c4879246a420c6741cb5eb2e058d5a2ea0d",
+    "licenseFile": "dysons-fear-gpl-3.0.txt",
+    "sourceArchive": "dysons-fear-v2.0-source.tar.gz",
+    "shellColor": "#b0332c",
+    "outputs": {
+      "standard": "baked-cartridge-dysons-fear.jpg",
+      "inPocket": "baked-cartridge-dysons-fear-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#2b0d18",
+      "accent": "#ffd24f",
+      "secondary": "#ee5367",
+      "motif": "radar",
+      "series": "GAMEX HOMEBREW"
+    }
+  },
+  {
+    "key": "unstoppable-knight",
+    "title": "UNSTOPPABLE KNIGHT",
+    "genre": "ACTION PLATFORMER",
+    "author": "RAFAEL GARCIA",
+    "license": "MIT",
+    "version": "2.2.2",
+    "year": 2021,
+    "cartridgeType": "UnstoppableKnight",
+    "romFile": "unstoppable-knight.gb",
+    "releaseUrl": "https://github.com/Rafagars/Unstoppable-Knight-GB/releases/download/2.2.2/knight.gb",
+    "sourceUrl": "https://github.com/Rafagars/Unstoppable-Knight-GB/tree/2.2.2",
+    "sha256": "191c7fad34e643ab5f1083cd8f1a0582a4cef2bfee068bf36e18805f8bc40aaf",
+    "licenseFile": "unstoppable-knight-mit.txt",
+    "shellColor": "#2a368a",
+    "outputs": {
+      "standard": "baked-cartridge-unstoppable-knight.jpg",
+      "inPocket": "baked-cartridge-unstoppable-knight-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#101e49",
+      "accent": "#f3c64f",
+      "secondary": "#8fc9ff",
+      "motif": "shield",
+      "series": "GAMEX HOMEBREW"
+    }
+  },
+  {
+    "key": "wyrmhole",
+    "title": "WYRMHOLE",
+    "genre": "ARCADE MAZE",
+    "author": "QUINN PAINTER",
+    "license": "MIT",
+    "version": "1.1",
+    "year": 2022,
+    "cartridgeType": "Wyrmhole",
+    "romFile": "wyrmhole.gb",
+    "releaseUrl": "https://github.com/QuinnPainter/Wyrmhole/releases/download/1.1/Wyrmhole.gb",
+    "sourceUrl": "https://github.com/QuinnPainter/Wyrmhole/tree/1.1",
+    "sha256": "a5e07f89119ee9c93aa50ec1ff828b2441781fa9b1a137f03af7b6c53ce03252",
+    "licenseFile": "wyrmhole-mit.txt",
+    "shellColor": "#191f23",
+    "outputs": {
+      "standard": "baked-cartridge-wyrmhole.jpg",
+      "inPocket": "baked-cartridge-wyrmhole-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#15131f",
+      "accent": "#f05a83",
+      "secondary": "#7ce5ce",
+      "motif": "wormhole",
+      "series": "GAMEX HOMEBREW"
+    }
+  },
+  {
+    "key": "tobu-tobu-girl",
     "title": "TOBU TOBU GIRL",
     "genre": "ARCADE PLATFORMER",
     "author": "TANGRAM GAMES",
     "license": "MIT + CC BY 4.0",
-    "cartridgeType": "UsYellow",
-    "romFile": "tobutobugirl.gb"
+    "version": "2017 release",
+    "year": 2017,
+    "cartridgeType": "TobuTobuGirl",
+    "romFile": "tobutobugirl.gb",
+    "releaseUrl": "https://hh3.gbdev.io/static/database-gb/entries/tobutobugirl/tobu.gb",
+    "sourceUrl": "https://github.com/SimonLarsen/tobutobugirl/tree/048a22c2d7ebbe25811322e8692803fa86bb643a",
+    "sha256": "5d3871cae77db2287807e8914fd21f76203e73aa3fec20955489d45cb4571d8f",
+    "licenseFile": "tobu-tobu-girl-mit.txt",
+    "shellColor": "#e8a825",
+    "outputs": {
+      "standard": "baked-cartridge-tobu-tobu-girl.jpg",
+      "inPocket": "baked-cartridge-tobu-tobu-girl-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#642354",
+      "accent": "#ffe054",
+      "secondary": "#65d5ec",
+      "motif": "bounce",
+      "series": "GAMEX HOMEBREW"
+    }
   },
   {
-    "key": "ucity",
+    "key": "micro-city",
     "title": "MICRO CITY",
     "genre": "CITY BUILDER",
     "author": "ANTONIOND",
     "license": "GPL-3.0-or-later",
-    "cartridgeType": "JpGold",
-    "romFile": "ucity.gbc"
+    "version": "v1.3",
+    "year": 2025,
+    "cartridgeType": "MicroCity",
+    "romFile": "ucity.gbc",
+    "releaseUrl": "https://github.com/AntonioND/ucity/releases/download/v1.3/ucity.gbc",
+    "sourceUrl": "https://github.com/AntonioND/ucity/tree/v1.3",
+    "sha256": "9422ee2ca7b7ea1d46b58b2a429fff3f354dfd3e732dee1e7ae6220f148ce6e0",
+    "licenseFile": "micro-city-gpl-3.0.txt",
+    "sourceArchive": "micro-city-v1.3-source.tar.gz",
+    "shellColor": "#242258",
+    "outputs": {
+      "standard": "baked-cartridge-micro-city.jpg",
+      "inPocket": "baked-cartridge-micro-city-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#121d48",
+      "accent": "#eec44b",
+      "secondary": "#62c7a5",
+      "motif": "city",
+      "series": "GAMEX HOMEBREW"
+    }
   },
   {
     "key": "2048",
@@ -23,26 +252,108 @@
     "genre": "SLIDING PUZZLE",
     "author": "SANQUI",
     "license": "Zlib",
-    "cartridgeType": "JpSilver",
-    "romFile": "2048.gb"
+    "version": "e44f94f",
+    "year": 2015,
+    "cartridgeType": "Game2048",
+    "romFile": "2048.gb",
+    "releaseUrl": "https://hh3.gbdev.io/static/database-gb/entries/2048gb/2048.gb",
+    "sourceUrl": "https://github.com/Sanqui/2048-gb/tree/e44f94f898c1e0de7caa1160c82c0da36ff5eb05",
+    "sha256": "3ea2376b15b34bd26b10e6b31d2753bf8b086098dbdb5ee84d9c0f03d66d3d7f",
+    "licenseFile": "2048-zlib.txt",
+    "shellColor": "#4b464d",
+    "outputs": {
+      "standard": "baked-cartridge-2048.jpg",
+      "inPocket": "baked-cartridge-2048-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#2f303a",
+      "accent": "#f1b74e",
+      "secondary": "#dde2d6",
+      "motif": "tiles",
+      "series": "GAMEX HOMEBREW"
+    }
   },
   {
-    "key": "wordyl",
-    "title": "GB WORDYL",
-    "genre": "WORD PUZZLE",
-    "author": "BBBBBR",
-    "license": "GPL-3.0",
-    "cartridgeType": "UsCrystal",
-    "romFile": "gb-wordyl.gb"
+    "key": "gb-corp",
+    "title": "GB CORP.",
+    "genre": "BUSINESS SIM",
+    "author": "DR. LUDOS",
+    "license": "MIT",
+    "version": "1.0",
+    "year": 2021,
+    "cartridgeType": "GbCorp",
+    "romFile": "gbcorp.gb",
+    "releaseUrl": "https://hh3.gbdev.io/static/database-gb/entries/gb-corp/gbcorp.gb",
+    "sourceUrl": "https://github.com/drludos/GBcorp/tree/1.0",
+    "sha256": "5a39926a23ff50448859b2d924d8bba5a8c68db91563783f0c593a3aa8e7bad3",
+    "licenseFile": "gb-corp-mit.txt",
+    "shellColor": "#1b1e20",
+    "outputs": {
+      "standard": "baked-cartridge-gb-corp.jpg",
+      "inPocket": "baked-cartridge-gb-corp-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#1a2025",
+      "accent": "#f1c855",
+      "secondary": "#74d1c5",
+      "motif": "office",
+      "series": "GAMEX HOMEBREW"
+    }
   },
   {
     "key": "carazu",
     "title": "CARAZU",
     "genre": "ACTION ADVENTURE",
-    "author": "MHOLTKAMP",
+    "author": "MATT HOLTKAMP",
     "license": "GPL-3.0",
-    "cartridgeType": "UsGold",
-    "romFile": "carazu.gb"
+    "version": "v1.0",
+    "year": 2016,
+    "cartridgeType": "Carazu",
+    "romFile": "carazu.gb",
+    "releaseUrl": "https://hh3.gbdev.io/static/database-gb/entries/carazu/carazu.gb",
+    "sourceUrl": "https://github.com/mholtkamp/carazu/tree/70ff274ef0de949424ebc1935d3d8bcac4685140",
+    "sha256": "eef9dea9ecba15be7b21f3495e8c8bad937a0b2245cac09eec8baf61dfc91fb5",
+    "licenseFile": "carazu-gpl-3.0.txt",
+    "sourceArchive": "carazu-70ff274-source.tar.gz",
+    "shellColor": "#a8892f",
+    "outputs": {
+      "standard": "baked-cartridge-carazu.jpg",
+      "inPocket": "baked-cartridge-carazu-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#4a3015",
+      "accent": "#f7da61",
+      "secondary": "#7cd5a2",
+      "motif": "temple",
+      "series": "GAMEX HOMEBREW"
+    }
+  },
+  {
+    "key": "shock-lobster",
+    "title": "SHOCK LOBSTER",
+    "genre": "ARCADE ACTION",
+    "author": "DAVE VANEE",
+    "license": "Zlib",
+    "version": "3",
+    "year": 2022,
+    "cartridgeType": "ShockLobster",
+    "romFile": "shock-lobster.gb",
+    "releaseUrl": "https://hh3.gbdev.io/static/database-gb/entries/shock-lobster/shocklobster.gb",
+    "sourceUrl": "https://github.com/tbsp/shock-lobster/tree/3",
+    "sha256": "f14efd0340903b1b00d7e8b4b39687d4bc33355ac7742267ccfddfe92f54a611",
+    "licenseFile": "shock-lobster-zlib.txt",
+    "shellColor": "#c0bab2",
+    "outputs": {
+      "standard": "baked-cartridge-shock-lobster.jpg",
+      "inPocket": "baked-cartridge-shock-lobster-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#18394b",
+      "accent": "#ffe655",
+      "secondary": "#ef6654",
+      "motif": "waves",
+      "series": "GAMEX HOMEBREW"
+    }
   },
   {
     "key": "geometrix",
@@ -50,25 +361,54 @@
     "genre": "MATCH PUZZLE",
     "author": "ANTONIOND",
     "license": "GPL-3.0-or-later",
-    "cartridgeType": "Puzzle",
-    "romFile": "geometrix.gbc"
+    "version": "v1.0.1",
+    "year": 2018,
+    "cartridgeType": "Geometrix",
+    "romFile": "geometrix.gbc",
+    "releaseUrl": "https://raw.githubusercontent.com/AntonioND/geometrix/v1.0.1/geometrix.gbc",
+    "sourceUrl": "https://github.com/AntonioND/geometrix/tree/v1.0.1",
+    "sha256": "f0995f2c2426cecad81883cf06a2a4af0af6a8080c75c6c3498f4adc234c606f",
+    "licenseFile": "geometrix-gpl-3.0.txt",
+    "sourceArchive": "geometrix-v1.0.1-source.tar.gz",
+    "shellColor": "#132f19",
+    "outputs": {
+      "standard": "baked-cartridge-geometrix.jpg",
+      "inPocket": "baked-cartridge-geometrix-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#102d26",
+      "accent": "#f3cd4d",
+      "secondary": "#59d5b3",
+      "motif": "geometry",
+      "series": "GAMEX HOMEBREW"
+    }
   },
   {
-    "key": "gbcorp",
-    "title": "GB CORP.",
-    "genre": "IDLE BUSINESS",
-    "author": "DR. LUDOS",
-    "license": "MIT",
-    "cartridgeType": "Tcg",
-    "romFile": "gbcorp.gb"
-  },
-  {
-    "key": "shock-lobster",
-    "title": "SHOCK LOBSTER",
-    "genre": "ACTION",
-    "author": "DAVE VANEE",
-    "license": "Zlib",
-    "cartridgeType": "UsSilver",
-    "romFile": "shock-lobster.gb"
+    "key": "gb-wordyl",
+    "title": "GB WORDYL",
+    "genre": "WORD PUZZLE",
+    "author": "BBBBBR",
+    "license": "GPL-3.0",
+    "version": "v0.85",
+    "year": 2022,
+    "cartridgeType": "GbWordyl",
+    "romFile": "gb-wordyl.gb",
+    "releaseUrl": "https://hh3.gbdev.io/static/database-gb/entries/gb-wordyl/GBWORDYL_0.85_en.gb",
+    "sourceUrl": "https://github.com/bbbbbr/gb-wordyl/tree/v0.85",
+    "sha256": "acc12e3e920e0c432606846da60a5ca9bba21f8012304e8de4a26f88273d14de",
+    "licenseFile": "gb-wordyl-gpl-3.0.txt",
+    "sourceArchive": "gb-wordyl-v0.85-source.tar.gz",
+    "shellColor": "#96baba",
+    "outputs": {
+      "standard": "baked-cartridge-gb-wordyl.jpg",
+      "inPocket": "baked-cartridge-gb-wordyl-in-pocket.jpg"
+    },
+    "theme": {
+      "background": "#194154",
+      "accent": "#f5d65e",
+      "secondary": "#92ead6",
+      "motif": "letters",
+      "series": "GAMEX HOMEBREW"
+    }
   }
 ]

@@ -8,8 +8,13 @@ import GameplayScreen from "./screens/gameplay-screen/gameplay-screen";
 import RoundScreen from "./screens/round-screen";
 import TitleScreen from "./screens/title-screen";
 import DEBUG_CONFIG from '../../../../../Data/Configs/Main/debug-config';
+import {
+  isSpaceInvadersSaveStateV1,
+  type SpaceInvadersSaveStateV1,
+} from './state/space-invaders-save-state';
+import type { SaveableBuiltinGame } from '../../save/saveable-builtin-game';
 
-export default class SpaceInvaders extends GameAbstract {
+export default class SpaceInvaders extends GameAbstract implements SaveableBuiltinGame<SpaceInvadersSaveStateV1> {
   public events: EventEmitter;
 
   private screens: { [key in SPACE_INVADERS_SCREEN_TYPE]?: any };
@@ -74,6 +79,28 @@ export default class SpaceInvaders extends GameAbstract {
     }
   }
 
+  public captureState(): SpaceInvadersSaveStateV1 {
+    return {
+      version: 1,
+      screen: (this.currentScreenType ?? SPACE_INVADERS_SCREEN_TYPE.Title) as SpaceInvadersSaveStateV1['screen'],
+      round: SPACE_INVADERS_CONFIG.currentRound,
+      gameplay: this.screens[SPACE_INVADERS_SCREEN_TYPE.Gameplay].captureState(),
+    };
+  }
+
+  public restoreState(state: SpaceInvadersSaveStateV1): boolean {
+    if (!isSpaceInvadersSaveStateV1(state)) {
+      return false;
+    }
+
+    const backup = this.captureState();
+    if (this.applyState(state)) {
+      return true;
+    }
+    this.applyState(backup);
+    return false;
+  }
+
   private reset(): void {
     SPACE_INVADERS_CONFIG.currentRound = 1;
 
@@ -85,6 +112,23 @@ export default class SpaceInvaders extends GameAbstract {
   private showScreen(screenType: SPACE_INVADERS_SCREEN_TYPE): void {
     this.currentScreenType = screenType;
     this.screens[screenType].show();
+  }
+
+  private applyState(state: SpaceInvadersSaveStateV1): boolean {
+    try {
+      this.stopTweens();
+      for (const screenType in this.screens) {
+        this.screens[screenType].hide();
+      }
+      this.reset();
+      SPACE_INVADERS_CONFIG.currentRound = state.round;
+      this.screens[SPACE_INVADERS_SCREEN_TYPE.Round].updateRound();
+      this.showScreen(state.screen as SPACE_INVADERS_SCREEN_TYPE);
+      this.screens[SPACE_INVADERS_SCREEN_TYPE.Gameplay].restoreState(state.gameplay);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   private init(): void {

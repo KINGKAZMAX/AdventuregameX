@@ -2,6 +2,7 @@ import { Container, Sprite, EventEmitter, Spritesheet, Texture } from "pixi.js";
 import Loader from '../../../../../../../../core/loader';
 import { ENEMIES_CONFIG, ENEMY_MOVEMENT_DIRECTION } from './data/enemy-config';
 import { SPACE_INVADERS_CONFIG } from '../../../data/space-invaders-config';
+import type { SpaceInvadersEnemyState } from '../../../state/space-invaders-save-state';
 
 export default class Enemy extends Container {
   public events: EventEmitter;
@@ -109,6 +110,36 @@ export default class Enemy extends Container {
 
   public enableShooting(): void {
     this.isShootingEnabled = true;
+  }
+
+  public captureState(): SpaceInvadersEnemyState {
+    return {
+      type: this.type as SpaceInvadersEnemyState['type'],
+      x: this.x,
+      y: this.y,
+      textureIndex: this.textureIndex,
+      speed: this.speed,
+      moveTime: this.moveTime,
+      moveInterval: this.moveInterval,
+      direction: this.moveDirection,
+      shooting: this.isShootingEnabled,
+    };
+  }
+
+  public restoreState(state: SpaceInvadersEnemyState): void {
+    this.x = state.x;
+    this.y = state.y;
+    this.textureIndex = state.textureIndex % this.config.textures.length;
+    this.speed = state.speed;
+    this.moveTime = state.moveTime;
+    this.moveInterval = state.moveInterval;
+    this.moveDirection = state.direction as ENEMY_MOVEMENT_DIRECTION;
+    this.isShootingEnabled = state.shooting;
+    this.isEnemyActive = true;
+    this.visible = true;
+
+    const spriteSheet = Loader.assets['assets/spritesheets/space-invaders-sheet'] as Spritesheet;
+    this.view.texture = spriteSheet.textures[this.config.textures[this.textureIndex]] as Texture;
   }
 
   private checkToShoot(): void {

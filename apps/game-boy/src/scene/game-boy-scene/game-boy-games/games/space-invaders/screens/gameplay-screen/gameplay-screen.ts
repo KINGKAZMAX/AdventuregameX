@@ -14,8 +14,9 @@ import Score from "./ui-elements/score";
 import EnemyMissile from "./missile/enemy-missile";
 import { GAME_BOY_SOUND_TYPE } from "../../../../../game-boy/game-boy-audio/game-boy-audio-data";
 import GameBoyAudio from "../../../../../game-boy/game-boy-audio/game-boy-audio";
-import { Timeout } from "../../../../../../../core/helpers/timeout";
+import { Timeout, TimeoutInstance } from "../../../../../../../core/helpers/timeout";
 import Enemy from "./enemies-controller/enemy";
+import type { SpaceInvadersGameplayState } from "../../state/space-invaders-save-state";
 
 export default class GameplayScreen extends GameScreenAbstract {
   private fieldContainer: Container;
@@ -28,6 +29,7 @@ export default class GameplayScreen extends GameScreenAbstract {
   private playerShootReloadTime: number;
   private playerLives: PlayerLives;
   private score: Score;
+  private timers: TimeoutInstance[];
 
   constructor() {
     super();
@@ -41,6 +43,7 @@ export default class GameplayScreen extends GameScreenAbstract {
     this.isGameActive = false;
     this.isGamePaused = false;
     this.playerShootReloadTime = 0;
+    this.timers = [];
 
     this.init();
   }
@@ -91,6 +94,8 @@ export default class GameplayScreen extends GameScreenAbstract {
 
   public stopTweens(): void {
     this.enemiesController.stopTweens();
+    this.timers.forEach((timer) => timer.stop());
+    this.timers = [];
   }
 
   public reset(): void {
@@ -106,6 +111,48 @@ export default class GameplayScreen extends GameScreenAbstract {
   public resetLivesScores(): void {
     this.playerLives.reset();
     this.score.reset();
+  }
+
+  public captureState(): SpaceInvadersGameplayState {
+    this.normalizeForSave();
+    const enemiesState = this.enemiesController.captureState();
+    return {
+      active: this.isGameActive,
+      paused: this.isGamePaused,
+      reloadTime: this.playerShootReloadTime,
+      player: this.player.captureState(),
+      lives: this.playerLives.captureState(),
+      score: this.score.captureState(),
+      ...enemiesState,
+      playerMissiles: this.playerMissiles.map((missile) => missile.captureState()),
+      enemyMissiles: this.enemyMissiles.map((missile) => missile.captureState()),
+    };
+  }
+
+  public restoreState(state: SpaceInvadersGameplayState): void {
+    this.stopTweens();
+    this.reset();
+    this.isGameActive = state.active;
+    this.isGamePaused = state.paused;
+    this.playerShootReloadTime = state.reloadTime;
+    this.player.restoreState(state.player);
+    this.playerLives.restoreState(state.lives);
+    this.score.restoreState(state.score);
+    this.enemiesController.restoreState(state);
+
+    state.playerMissiles.forEach((missileState) => {
+      const missile = this.createPlayerMissile(new Point(missileState.x, missileState.y));
+      missile.activate();
+      this.playerMissiles.push(missile);
+    });
+    state.enemyMissiles.forEach((missileState) => {
+      const missile = this.createEnemyMissile(
+        new Point(missileState.x, missileState.y),
+        missileState.type as MISSILE_TYPE,
+      );
+      missile.restoreState(missileState);
+      this.enemyMissiles.push(missile);
+    });
   }
 
   private removeAllPlayerMissiles(): void {
@@ -207,7 +254,7 @@ export default class GameplayScreen extends GameScreenAbstract {
 
     GameBoyAudio.playSound(GAME_BOY_SOUND_TYPE.PlayerKilled);
 
-    Timeout.call(1000, () => {
+    this.schedule(1000, () => {
       this.player.hideHit();
       this.setPlayerStartPosition();
       this.isGamePaused = false;
@@ -241,7 +288,7 @@ export default class GameplayScreen extends GameScreenAbstract {
     missile.deactivate();
     missile.explode();
 
-    Timeout.call(300, () => {
+    this.schedule(300, () => {
       this.removePlayerMissile(missile);
     });
   }
@@ -250,7 +297,7 @@ export default class GameplayScreen extends GameScreenAbstract {
     missile.deactivate();
     missile.explode();
 
-    Timeout.call(300, () => {
+    this.schedule(300, () => {
       this.removeEnemyMissile(missile);
     });
   }
@@ -308,7 +355,7 @@ export default class GameplayScreen extends GameScreenAbstract {
     this.player.showHit();
     GameBoyAudio.playSound(GAME_BOY_SOUND_TYPE.PlayerKilled);
 
-    Timeout.call(1000, () => {
+    this.schedule(1000, () => {
       this.gameOver();
     });
   }
@@ -316,6 +363,33 @@ export default class GameplayScreen extends GameScreenAbstract {
   private setPlayerStartPosition(): void {
     this.player.x = GAME_BOY_CONFIG.screen.width * 0.5 - 8;
     this.player.y = GAME_BOY_CONFIG.screen.height - 8;
+  }
+
+  private normalizeForSave(): void {
+    this.stopTweens();
+    this.playerMissiles
+      .filter((missile) => !missile.isActive())
+      .forEach((missile) => this.removePlayerMissile(missile));
+    this.enemyMissiles
+      .filter((missile) => !missile.isActive())
+      .forEach((missile) => this.removeEnemyMissile(missile));
+
+    if (this.isGamePaused && !this.player.isActive()) {
+      this.player.hideHit();
+      this.setPlayerStartPosition();
+      this.isGamePaused = false;
+    }
+  }
+
+  private schedule(delay: number, callback: () => void): void {
+    const timer = Timeout.call(delay, () => {
+      const index = this.timers.indexOf(timer);
+      if (index >= 0) {
+        this.timers.splice(index, 1);
+      }
+      callback();
+    });
+    this.timers.push(timer);
   }
 
   private init(): void {
@@ -373,7 +447,7 @@ export default class GameplayScreen extends GameScreenAbstract {
   private allEnemiesKilled(): void {
     this.removeAllEnemyMissiles();
 
-    Timeout.call(500, () => {
+    this.schedule(500, () => {
       this.events.emit('onAllEnemiesKilled');
     });
   }

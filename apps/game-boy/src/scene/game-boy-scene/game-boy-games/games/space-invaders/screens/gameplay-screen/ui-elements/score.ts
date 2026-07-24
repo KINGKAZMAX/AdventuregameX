@@ -29,8 +29,17 @@ export default class Score extends Container {
   }
 
   public reset(): void {
-    this.score = 0;
-    this.scoreText.text = '00000';
+    this.restoreState(0);
+  }
+
+  public captureState(): number {
+    return this.score;
+  }
+
+  public restoreState(score: number): void {
+    this.score = score;
+    this.scoreText.text = this.score.toString().padStart(5, '0');
+    SPACE_INVADERS_CONFIG.bestScore = Math.max(SPACE_INVADERS_CONFIG.bestScore, score);
   }
 
   private init(): void {

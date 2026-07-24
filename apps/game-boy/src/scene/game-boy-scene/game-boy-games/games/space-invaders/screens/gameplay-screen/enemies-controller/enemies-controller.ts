@@ -3,6 +3,16 @@ import { ENEMY_CONFIG, ENEMY_MOVEMENT_DIRECTION, ENEMY_TYPE } from './data/enemy
 import Enemy from './enemy';
 import { SPACE_INVADERS_CONFIG } from '../../../data/space-invaders-config';
 import { Timeout, TimeoutInstance } from '../../../../../../../../core/helpers/timeout';
+import type {
+  EnemyMovementDirection,
+  SpaceInvadersEnemyState,
+} from '../../../state/space-invaders-save-state';
+
+interface EnemiesControllerState {
+  enemies: (SpaceInvadersEnemyState | null)[][];
+  enemyDirection: EnemyMovementDirection;
+  previousEnemyDirection: EnemyMovementDirection;
+}
 
 export default class EnemiesController extends Container {
   public events: EventEmitter;
@@ -85,7 +95,36 @@ export default class EnemiesController extends Container {
       this.enemies = [];
     }
 
+    this.movementDirection = ENEMY_MOVEMENT_DIRECTION.Right;
     this.previousMovementDirection = ENEMY_MOVEMENT_DIRECTION.Right;
+  }
+
+  public captureState(): EnemiesControllerState {
+    this.normalizeForSave();
+    const enemies = this.enemies.length === 0
+      ? Array.from({ length: ENEMY_CONFIG.rows }, () => Array(ENEMY_CONFIG.columns).fill(null))
+      : this.enemies.map((row) => row.map((enemy) => enemy?.captureState() ?? null));
+    return {
+      enemies,
+      enemyDirection: this.movementDirection,
+      previousEnemyDirection: this.previousMovementDirection,
+    };
+  }
+
+  public restoreState(state: EnemiesControllerState): void {
+    this.reset();
+    this.movementDirection = state.enemyDirection as ENEMY_MOVEMENT_DIRECTION;
+    this.previousMovementDirection = state.previousEnemyDirection as ENEMY_MOVEMENT_DIRECTION;
+    this.enemies = state.enemies.map((row) => row.map((enemyState) => {
+      if (enemyState === null) {
+        return null;
+      }
+      const enemy = new Enemy(enemyState.type);
+      enemy.restoreState(enemyState);
+      this.addChild(enemy);
+      this.initSignals(enemy);
+      return enemy;
+    }));
   }
 
   public removeEnemy(enemy: Enemy): void {
@@ -158,9 +197,32 @@ export default class EnemiesController extends Container {
       }
     }
 
-    Timeout.call(delay * index, () => {
+    const bottomEnemiesTimer = Timeout.call(delay * index, () => {
       this.updateBottomEnemies();
     });
+    this.showEnemiesTimers.push(bottomEnemiesTimer);
+  }
+
+  private normalizeForSave(): void {
+    this.stopTweens();
+    for (let row = 0; row < this.enemies.length; row += 1) {
+      for (let column = 0; column < this.enemies[row].length; column += 1) {
+        const enemy = this.enemies[row][column];
+        if (!enemy || enemy.getEnemyActive()) {
+          continue;
+        }
+        if (enemy.visible) {
+          this.removeChild(enemy);
+          this.enemies[row][column] = null;
+        } else {
+          enemy.activate();
+          enemy.show();
+        }
+      }
+    }
+    if (this.enemies.length > 0) {
+      this.updateBottomEnemies();
+    }
   }
 
   private checkIsAnyEnemyAlive(): boolean {

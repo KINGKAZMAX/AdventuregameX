@@ -1,4 +1,4 @@
-import { Container, Sprite, Graphics, EventEmitter } from 'pixi.js';
+import { Container, Sprite, Graphics, EventEmitter, Spritesheet, Texture } from 'pixi.js';
 import { LEVELS_CONFIG, TETRIS_CONFIG } from '../../../data/tetris-config';
 import Shape from './shape/shape';
 import { BUTTON_TYPE } from '../../../../../../game-boy/data/game-boy-data';
@@ -6,6 +6,10 @@ import { ROTATE_TYPE, SHAPE_TYPE } from './shape/shape-config';
 import GameBoyAudio from '../../../../../../game-boy/game-boy-audio/game-boy-audio';
 import { GAME_BOY_SOUND_TYPE } from '../../../../../../game-boy/game-boy-audio/game-boy-audio-data';
 import { Timeout } from '../../../../../../../../core/helpers/timeout';
+import Loader from '../../../../../../../../core/loader';
+import type { TetrisGameplayState } from '../../../state/tetris-save-state';
+
+type TetrisFieldState = Omit<TetrisGameplayState, 'active' | 'paused' | 'gameOver'>;
 
 export default class Field extends Container {
   public events: EventEmitter;
@@ -188,6 +192,97 @@ export default class Field extends Container {
     this.showFilledRowsAnimation(filledRows, true);
   }
 
+  public captureState(): TetrisFieldState {
+    this.normalizePendingLineClear();
+
+    return {
+      board: this.fieldMap.map((row) => row.map((block) => {
+        if (block === null) {
+          return null;
+        }
+        return {
+          texture: block.label || block.texture.label,
+          tint: Number(block.tint),
+          rotation: block.rotation,
+        };
+      })),
+      currentShape: this.currentShape?.captureState() ?? null,
+      nextShape: this.nextShapeType,
+      shapeFallTime: this.shapeFallTime,
+      shapeFallInterval: this.shapeFallInterval,
+      lines: this.filledRowsCount,
+      linesCurrentLevel: this.filledRowsCountCurrentLevel,
+      score: this.score,
+      softDropScore: this.scoreForFallFast,
+      level: this.currentLevel,
+      fastFallArmed: this.isPressUpForFallFast,
+      fastFalling: this.isShapeFallFast,
+      fallingDisabled: this.isFallingDisabled,
+    };
+  }
+
+  public restoreState(state: TetrisGameplayState): boolean {
+    const spriteSheet = Loader.assets['assets/spritesheets/tetris-sheet'] as Spritesheet;
+    for (const row of state.board) {
+      for (const block of row) {
+        if (block !== null && !spriteSheet.textures[block.texture]) {
+          return false;
+        }
+      }
+    }
+
+    this.stopTweens();
+    this.reset();
+
+    for (let row = 0; row < state.board.length; row += 1) {
+      for (let column = 0; column < state.board[row].length; column += 1) {
+        const blockState = state.board[row][column];
+        if (blockState === null) {
+          continue;
+        }
+        const block = new Sprite(spriteSheet.textures[blockState.texture] as Texture);
+        block.label = blockState.texture;
+        block.tint = blockState.tint;
+        block.rotation = blockState.rotation;
+        block.x = column * TETRIS_CONFIG.blockSize;
+        block.y = row * TETRIS_CONFIG.blockSize;
+        this.fieldMap[row][column] = block;
+        this.fieldMapContainer.addChild(block);
+      }
+    }
+
+    if (state.currentShape !== null) {
+      const shape = new Shape(state.currentShape.type as SHAPE_TYPE);
+      if (!shape.restoreState(state.currentShape)) {
+        shape.destroy({ children: true });
+        return false;
+      }
+      this.currentShape = shape;
+      this.addChild(shape);
+    }
+
+    this.nextShapeType = state.nextShape as SHAPE_TYPE | null;
+    this.shapeFallTime = state.shapeFallTime;
+    this.shapeFallInterval = state.shapeFallInterval;
+    this.filledRowsCount = state.lines;
+    this.filledRowsCountCurrentLevel = state.linesCurrentLevel;
+    this.score = state.score;
+    this.scoreForFallFast = state.softDropScore;
+    this.currentLevel = state.level;
+    this.isPressUpForFallFast = state.fastFallArmed;
+    this.isShapeFallFast = state.fastFalling;
+    this.isFallingDisabled = state.fallingDisabled;
+    this.fieldMapContainer.cacheAsTexture(true);
+
+    this.events.emit('onFilledRowsCountChange', this.filledRowsCount);
+    this.events.emit('onLevelChanged', this.currentLevel);
+    this.events.emit('onScoreChange', this.score);
+    if (this.nextShapeType !== null) {
+      this.events.emit('onChangedNextShape', this.nextShapeType);
+    }
+    return true;
+  }
+
   private moveShapeRight(): void {
     if (this.currentShape === null) {
       return;
@@ -367,6 +462,32 @@ export default class Field extends Container {
       this.hideUsedFilledRowAnimationShape(usedFilledRowAnimationShape);
       this.afterFilledRowsAnimation(filledRows, debugClear);
     });
+  }
+
+  private normalizePendingLineClear(): void {
+    if (!this.linesBlinkTimer?.isPlaying) {
+      return;
+    }
+
+    const filledRows = this.fieldMap.map((row) => row.every((block) => block !== null));
+    const count = filledRows.filter(Boolean).length;
+    this.stopTweens();
+    this.linesBlinkTimer = null;
+    this.linesBlinkTimers = [];
+
+    const animationShapes = this.children.filter((child) => child instanceof Graphics) as Graphics[];
+    for (const shape of animationShapes) {
+      shape.visible = false;
+    }
+    this.filledRowAnimationShapes = animationShapes;
+
+    if (count > 0) {
+      this.filledRowsCount += count;
+      this.calculateScore(count);
+      this.checkForNextLevel(count);
+      this.removeRowAndMoveRowsDown(filledRows);
+      this.afterShapePlaced();
+    }
   }
 
   private calculateScore(filledRowsCount: number): void {
@@ -593,6 +714,7 @@ export default class Field extends Container {
 
   private createBlockCopy(block: Sprite): Sprite {
     const blockCopy = new Sprite(block.texture);
+    blockCopy.label = block.texture.label;
     blockCopy.tint = block.tint;
 
     return blockCopy;

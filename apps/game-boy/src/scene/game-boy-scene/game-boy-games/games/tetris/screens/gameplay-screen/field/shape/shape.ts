@@ -2,6 +2,7 @@ import { Container, Point, Sprite, Spritesheet, Texture } from 'pixi.js';
 import { TETRIS_CONFIG } from '../../../../data/tetris-config';
 import Loader from '../../../../../../../../../core/loader';
 import { DIRECTION_SEQUENCE, ROTATE_TYPE, SHAPE_CONFIG, SHAPE_DIRECTION, SHAPE_TYPE } from './shape-config';
+import type { TetrisShapeState } from '../../../../state/tetris-save-state';
 
 export default class Shape extends Container {
   private type: SHAPE_TYPE;
@@ -70,6 +71,32 @@ export default class Shape extends Container {
 
   public getDirection(): SHAPE_DIRECTION {
     return this.direction;
+  }
+
+  public captureState(): TetrisShapeState {
+    return {
+      type: this.type,
+      x: this.blockPosition.x,
+      y: this.blockPosition.y,
+      direction: this.direction,
+      distanceFallen: this.distanceFallen,
+    };
+  }
+
+  public restoreState(state: TetrisShapeState): boolean {
+    if (state.type !== this.type) {
+      return false;
+    }
+
+    this.setPosition(state.x, state.y);
+    for (let turn = 0; turn < 4 && this.direction !== state.direction; turn += 1) {
+      this.rotate(ROTATE_TYPE.Clockwise);
+    }
+    if (this.direction !== state.direction) {
+      return false;
+    }
+    this.distanceFallen = state.distanceFallen;
+    return true;
   }
 
   public rotate(rotateType: ROTATE_TYPE): void {

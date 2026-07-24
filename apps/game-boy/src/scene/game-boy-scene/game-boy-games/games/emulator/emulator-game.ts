@@ -5,6 +5,7 @@ import { BUTTON_TYPE } from '../../../game-boy/data/game-boy-data';
 import { SOUNDS_CONFIG } from '../../../../../Data/Configs/Main/sounds-config';
 import { EMULATOR_GAMES_CONFIG, EmulatorGameConfig } from './emulator-games-config';
 import { WasmBoy, WasmBoyJoypadState } from '../../../../../vendor/wasmboy/wasmboy.esm.js';
+import type { LoadStateResult, SaveStateResult } from '../../save/save-state-result';
 
 const JOYPAD_KEY_BY_BUTTON: { [key in BUTTON_TYPE]: keyof WasmBoyJoypadState } = {
   [BUTTON_TYPE.A]: 'A',
@@ -82,9 +83,9 @@ export default class EmulatorGame extends GameAbstract {
     this.applyVolume();
   }
 
-  public async saveState(): Promise<boolean> {
+  public async saveState(): Promise<SaveStateResult> {
     if (!this.isRunning || this.isBusy) {
-      return false;
+      return { status: 'unavailable' };
     }
 
     this.isBusy = true;
@@ -94,19 +95,19 @@ export default class EmulatorGame extends GameAbstract {
       await WasmBoy.saveState();
       await WasmBoy.saveLoadedCartridge();
       await WasmBoy.play();
-      return true;
+      return { status: 'saved' };
     } catch (error) {
       console.warn('EmulatorGame: save state failed', error);
       await this.tryResume();
-      return false;
+      return { status: 'failed' };
     } finally {
       this.isBusy = false;
     }
   }
 
-  public async loadState(): Promise<boolean> {
+  public async loadState(): Promise<LoadStateResult> {
     if (!this.isRunning || this.isBusy) {
-      return false;
+      return { status: 'unavailable' };
     }
 
     this.isBusy = true;
@@ -117,7 +118,7 @@ export default class EmulatorGame extends GameAbstract {
 
       if (!saveStates || saveStates.length === 0) {
         await WasmBoy.play();
-        return false;
+        return { status: 'missing' };
       }
 
       const manualStates = saveStates.filter((state) => !state.isAuto);
@@ -127,11 +128,11 @@ export default class EmulatorGame extends GameAbstract {
       await WasmBoy.loadState(latest);
       await WasmBoy.play();
       this.resetJoypad();
-      return true;
+      return { status: 'loaded' };
     } catch (error) {
       console.warn('EmulatorGame: load state failed', error);
       await this.tryResume();
-      return false;
+      return { status: 'failed' };
     } finally {
       this.isBusy = false;
     }

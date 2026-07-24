@@ -17,6 +17,10 @@ import CameraController from './camera-controller/camera-controller';
 import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import Cartridge from './cartridges/cartridge';
 import CartridgeInfoPanel from '../../ui/cartridge-info-panel';
+import type {
+  LoadStateResult,
+  SaveStateResult,
+} from './game-boy-games/save/save-state-result';
 
 // Long-press: hold a cartridge this long (ms) to open its open-source info card
 // instead of inserting it. Moving further than this (px) cancels the press.
@@ -472,7 +476,9 @@ export default class GameBoyController {
       this.gameBoyDebug.enableTetrisButtons();
     }
 
-    if (gameType === GAME_TYPE.Emulator) {
+    if (gameType === GAME_TYPE.Emulator
+      || gameType === GAME_TYPE.Tetris
+      || gameType === GAME_TYPE.SpaceInvaders) {
       this.gameBoyDebug.enableSaveStateButtons();
     }
   }
@@ -482,21 +488,35 @@ export default class GameBoyController {
       this.gameBoyDebug.disableTetrisButtons();
     }
 
-    if (gameType === GAME_TYPE.Emulator) {
+    if (gameType === GAME_TYPE.Emulator
+      || gameType === GAME_TYPE.Tetris
+      || gameType === GAME_TYPE.SpaceInvaders) {
       this.gameBoyDebug.disableSaveStateButtons();
     }
   }
 
   private async onSaveStateButtonClicked(): Promise<void> {
     this.gameBoyDebug.updateSaveStateStatus('Saving...');
-    const isSaved: boolean = await this.games.saveEmulatorState();
-    this.gameBoyDebug.updateSaveStateStatus(isSaved ? 'Saved' : 'Save failed');
+    const result: SaveStateResult = await this.games.saveCurrentGameState();
+    const status = result.status === 'saved'
+      ? 'Saved'
+      : result.status === 'unavailable'
+        ? 'No game running'
+        : 'Save failed';
+    this.gameBoyDebug.updateSaveStateStatus(status);
   }
 
   private async onLoadStateButtonClicked(): Promise<void> {
     this.gameBoyDebug.updateSaveStateStatus('Loading...');
-    const isLoaded: boolean = await this.games.loadEmulatorState();
-    this.gameBoyDebug.updateSaveStateStatus(isLoaded ? 'Loaded' : 'No save found');
+    const result: LoadStateResult = await this.games.loadCurrentGameState();
+    const status = result.status === 'loaded'
+      ? 'Loaded'
+      : result.status === 'missing'
+        ? 'No save state'
+        : result.status === 'unavailable'
+          ? 'No game running'
+          : 'Load failed';
+    this.gameBoyDebug.updateSaveStateStatus(status);
   }
 
   private restartTetrisButtonClicked(level: number): void {

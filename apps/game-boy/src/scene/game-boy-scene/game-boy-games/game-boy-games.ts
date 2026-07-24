@@ -11,6 +11,24 @@ import GameBoyAudio from '../game-boy/game-boy-audio/game-boy-audio.ts';
 import { EventEmitter } from 'pixi.js';
 import DEBUG_CONFIG from '../../../Data/Configs/Main/debug-config.ts';
 import { SOUNDS_CONFIG } from '../../../Data/Configs/Main/sounds-config.ts';
+import { BuiltinSaveStore } from './save/builtin-save-store.ts';
+import {
+  routeLoadCurrentGameState,
+  routeSaveCurrentGameState,
+  type BuiltinSaveStores,
+} from './save/game-save-router.ts';
+import type { LoadStateResult, SaveStateResult } from './save/save-state-result.ts';
+import {
+  isTetrisSaveStateV1,
+  type TetrisSaveStateV1,
+} from './games/tetris/state/tetris-save-state.ts';
+import {
+  isSpaceInvadersSaveStateV1,
+  type SpaceInvadersSaveStateV1,
+} from './games/space-invaders/state/space-invaders-save-state.ts';
+
+const TETRIS_SAVE_KEY = 'gamex:builtin-save:TETRIS:v1';
+const SPACE_INVADERS_SAVE_KEY = 'gamex:builtin-save:SPACE_INVADERS:v1';
 
 export default class GameBoyGames {
   public events: EventEmitter;
@@ -26,6 +44,7 @@ export default class GameBoyGames {
   private powerOffTween: any;
   private isUpdateEnabled: boolean;
   private gameType: string;
+  private builtinSaveStores: BuiltinSaveStores;
 
   constructor(application: Application) {
 
@@ -44,6 +63,22 @@ export default class GameBoyGames {
     this.isUpdateEnabled = GAME_BOY_CONFIG.powerOn;
 
     this.gameType = null;
+    this.builtinSaveStores = {
+      [GAME_TYPE.Tetris]: new BuiltinSaveStore<TetrisSaveStateV1>({
+        storage: window.localStorage,
+        gameId: GAME_TYPE.Tetris,
+        version: 1,
+        key: TETRIS_SAVE_KEY,
+        isState: isTetrisSaveStateV1,
+      }),
+      [GAME_TYPE.SpaceInvaders]: new BuiltinSaveStore<SpaceInvadersSaveStateV1>({
+        storage: window.localStorage,
+        gameId: GAME_TYPE.SpaceInvaders,
+        version: 1,
+        key: SPACE_INVADERS_SAVE_KEY,
+        isState: isSpaceInvadersSaveStateV1,
+      }),
+    };
 
     this.init();
   }
@@ -116,12 +151,20 @@ export default class GameBoyGames {
     this.games[GAME_TYPE.Emulator].onVolumeChanged();
   }
 
-  public saveEmulatorState(): Promise<boolean> {
-    return this.games[GAME_TYPE.Emulator].saveState();
+  public saveCurrentGameState(): Promise<SaveStateResult> {
+    return routeSaveCurrentGameState(
+      this.gameType as GAME_TYPE | null,
+      this.games,
+      this.builtinSaveStores,
+    );
   }
 
-  public loadEmulatorState(): Promise<boolean> {
-    return this.games[GAME_TYPE.Emulator].loadState();
+  public loadCurrentGameState(): Promise<LoadStateResult> {
+    return routeLoadCurrentGameState(
+      this.gameType as GAME_TYPE | null,
+      this.games,
+      this.builtinSaveStores,
+    );
   }
 
   public onButtonPress(buttonType: string): void {

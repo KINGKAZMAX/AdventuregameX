@@ -10,6 +10,7 @@ interface BuiltinSaveStoreOptions<State> {
   storage: Storage;
   gameId: string;
   version: number;
+  key?: string;
   isState: (value: unknown) => value is State;
 }
 
@@ -37,7 +38,7 @@ export class BuiltinSaveStore<State> {
     this.gameId = options.gameId;
     this.version = options.version;
     this.isState = options.isState;
-    this.key = `gamex:builtin-save:${this.gameId}:v${this.version}`;
+    this.key = options.key ?? `gamex:builtin-save:${this.gameId}:v${this.version}`;
   }
 
   public save(state: State): BuiltinSaveResult {

@@ -349,3 +349,26 @@ Game Boy lineup in version-matched colours: Red, Blue, Yellow, Green, Gold, Silv
 - Remaining release gate: browser acceptance must insert and play every
   cartridge, exercise controls, save, refresh, reload, continue, inspect
   screenshots, and record console errors for a final 17/17 report.
+
+## 2026-07-25 — Browser play/save/load acceptance: 17/17
+
+- Used the prescribed `develop-web-game` Playwright client against the built Hub
+  app. Every cartridge was inserted through the real cartridge controller,
+  booted, exercised with Start/D-pad/A/B input, saved, refreshed in the same
+  browser storage context, reinserted, loaded, and exercised again.
+- Final result: 17/17 passed title matching, boot, input response, save, load,
+  and continued-play checks; 0 console errors and 0 page errors.
+- All 15 WasmBoy games produced non-blank LCD frames and input-dependent frame
+  hashes. Static/menu-heavy games also had tailored sequences based on their
+  upstream control documentation rather than relying on animation alone.
+- Tetris restored Gameplay with its board, active shape, score, lines, level,
+  timing, and flags; a subsequent move/drop changed the active shape state.
+- Space Invaders restored round 1 with 3 lives, score 0, 40 enemies, player and
+  missile state; subsequent movement/fire changed player and missile state.
+- Auditable artifacts:
+  `tmp/gamex-cartridge-acceptance.json` contains every per-cartridge result and
+  LCD/state fingerprints; `tmp/gamex-cartridge-acceptance.html` renders the
+  final 17-row acceptance table.
+- The query-gated acceptance bridge used to collect runtime state was removed
+  from product code after evidence capture. The final release build contains no
+  acceptance-only hook.

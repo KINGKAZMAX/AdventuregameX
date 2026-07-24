@@ -1,0 +1,221 @@
+{
+  "status": "passed",
+  "accepted": 17,
+  "total": 17,
+  "generatedAt": "2026-07-25",
+  "method": {
+    "client": "/Users/mekzenx2/.codex/skills/develop-web-game/scripts/web_game_playwright_client.js",
+    "flow": "real insert, boot, input, save, iframe refresh, real reinsert, load, continue",
+    "evidenceRuns": [
+      "output/web-game-acceptance-17-final/state-0.json",
+      "output/web-game-smoke-final-four/state-0.json"
+    ],
+    "consoleErrors": 0
+  },
+  "results": [
+    {
+      "cartridge": "ADJUSTRIS",
+      "labelTitle": "Adjustris",
+      "runtimeTitle": "ADJUSTRIS",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "998313c5", "input": "e1d28157", "loaded": "e1d28157", "continued": "5094ba17" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "BREKSTAS_CAT",
+      "labelTitle": "Breksta's Cat",
+      "runtimeTitle": "BREKSTA'S CAT",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "998313c5", "input": "42837978", "loaded": "bd39bfcd", "continued": "8ae717c8" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "AIRPLANZ",
+      "labelTitle": "AIRPLANZ",
+      "runtimeTitle": "AIRPLANZ",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "19d5bdc5", "input": "a62d2e9d", "loaded": "a62d2e9d", "continued": "6387cabd" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "CROSS_CONNECT",
+      "labelTitle": "CrossConnect",
+      "runtimeTitle": "CROSS CONNECT",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "998313c5", "input": "9684681d", "loaded": "aa54c39d", "continued": "2496d41d" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "DYSONS_FEAR",
+      "labelTitle": "Dyson's Fear",
+      "runtimeTitle": "DYSON'S FEAR",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "ca9fb825", "input": "f0914b2f", "loaded": "b808ba47", "continued": "360c810d" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "UNSTOPPABLE_KNIGHT",
+      "labelTitle": "Unstoppable Knight",
+      "runtimeTitle": "UNSTOPPABLE KNIGHT",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "d4b675c5", "input": "25c225a5", "loaded": "25c225a5", "continued": "732e2655" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "WYRMHOLE",
+      "labelTitle": "Wyrmhole",
+      "runtimeTitle": "WYRMHOLE",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "924a032d", "input": "7b361635", "loaded": "7b361635", "continued": "5fe7f5c5" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "TOBU_TOBU_GIRL",
+      "labelTitle": "Tobu Tobu Girl",
+      "runtimeTitle": "TOBU TOBU GIRL",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "998313c5", "input": "e56830e5", "loaded": "e56830e5", "continued": "8b4c4855" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "MICRO_CITY",
+      "labelTitle": "Micro City",
+      "runtimeTitle": "MICRO CITY",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "01e663b5", "input": "39ac8d2d", "loaded": "5d8e442d", "continued": "e2901905" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "GAME_2048",
+      "labelTitle": "2048",
+      "runtimeTitle": "2048",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "855dd207", "input": "499e5365", "loaded": "499e5365", "continued": "df7580ef" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "GB_CORP",
+      "labelTitle": "GB Corp.",
+      "runtimeTitle": "GB CORP.",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "998313c5", "input": "ff220c7d", "loaded": "a90ec5fd", "continued": "3bb1d77d" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "CARAZU",
+      "labelTitle": "Carazu",
+      "runtimeTitle": "CARAZU",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "86aca9e5", "input": "2c654c8f", "loaded": "2c654c8f", "continued": "873b7e4b" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "SHOCK_LOBSTER",
+      "labelTitle": "Shock Lobster",
+      "runtimeTitle": "SHOCK LOBSTER",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "19d5bdc5", "input": "c5221cbd", "loaded": "d368a8d5", "continued": "c1208dcd" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "GEOMETRIX",
+      "labelTitle": "Geometrix",
+      "runtimeTitle": "GEOMETRIX",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "a60ffda5", "input": "d82cc7fd", "loaded": "d82cc7fd", "continued": "c5c4f805" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "GB_WORDYL",
+      "labelTitle": "GB Wordyl",
+      "runtimeTitle": "GB WORDYL",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "frameHashes": { "boot": "a457f5c5", "input": "5d8a494d", "loaded": "5d8a494d", "continued": "c2bc5335" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "TETRIS",
+      "labelTitle": "Tetris",
+      "runtimeTitle": "TETRIS",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "restoredState": { "screen": "GAMEPLAY", "score": 0, "lines": 0, "level": 0, "shape": "S", "continuedShape": "I" },
+      "consoleErrors": []
+    },
+    {
+      "cartridge": "SPACE_INVADERS",
+      "labelTitle": "Space Invaders",
+      "runtimeTitle": "SPACE INVADERS",
+      "booted": true,
+      "inputChangedFrame": true,
+      "saved": true,
+      "loaded": true,
+      "continued": true,
+      "restoredState": { "screen": "GAMEPLAY", "round": 1, "score": 0, "lives": 3, "enemies": 40, "continuedPlayerX": 73 },
+      "consoleErrors": []
+    }
+  ]
+}

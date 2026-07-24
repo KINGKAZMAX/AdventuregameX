@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameX 17/17 Cartridge Acceptance</title>
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #111216; color: #eceef4; font: 13px/1.4 ui-monospace, monospace; }
+    main { width: min(1380px, calc(100vw - 24px)); margin: 12px auto; }
+    canvas { width: 100%; height: auto; display: block; border: 1px solid #343844; border-radius: 12px; background: #181a20; }
+    iframe { position: fixed; right: 0; bottom: 0; width: 480px; height: 270px; opacity: 0.01; pointer-events: none; border: 0; }
+  </style>
+</head>
+<body>
+<main><canvas id="report" width="1360" height="900"></canvas></main>
+<iframe id="game" title="GameX acceptance target"></iframe>
+<script type="module">
+const allCartridges = [
+  ['ADJUSTRIS', 'Adjustris'],
+  ['BREKSTAS_CAT', "Breksta's Cat"],
+  ['AIRPLANZ', 'AIRPLANZ'],
+  ['CROSS_CONNECT', 'CrossConnect'],
+  ['DYSONS_FEAR', "Dyson's Fear"],
+  ['UNSTOPPABLE_KNIGHT', 'Unstoppable Knight'],
+  ['WYRMHOLE', 'Wyrmhole'],
+  ['TOBU_TOBU_GIRL', 'Tobu Tobu Girl'],
+  ['MICRO_CITY', 'Micro City'],
+  ['GAME_2048', '2048'],
+  ['GB_CORP', 'GB Corp.'],
+  ['CARAZU', 'Carazu'],
+  ['SHOCK_LOBSTER', 'Shock Lobster'],
+  ['GEOMETRIX', 'Geometrix'],
+  ['GB_WORDYL', 'GB Wordyl'],
+  ['TETRIS', 'Tetris'],
+  ['SPACE_INVADERS', 'Space Invaders'],
+];
+const requestedCartridge = new URLSearchParams(window.location.search).get('only');
+const cartridges = requestedCartridge
+  ? allCartridges.filter(([cartridge]) => requestedCartridge.split(',').includes(cartridge))
+  : allCartridges;
+
+const canvas = document.querySelector('#report');
+const context = canvas.getContext('2d');
+const iframe = document.querySelector('#game');
+const report = {
+  generatedAt: new Date().toISOString(),
+  status: 'running',
+  phase: 'initializing',
+  current: null,
+  completed: 0,
+  total: cartridges.length,
+  results: [],
+};
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const canonical = (value) => String(value ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+const clone = (value) => JSON.parse(JSON.stringify(value));
+const countEnemies = (runtime) => runtime?.gameplay?.enemies?.flat().filter(Boolean).length ?? null;
+
+function stateFingerprint(snapshot) {
+  const runtime = snapshot?.runtime;
+  if (snapshot?.gameType === 'EMULATOR') return runtime?.frameHash ?? null;
+  if (snapshot?.gameType === 'TETRIS') {
+    return JSON.stringify({
+      screen: runtime?.screen,
+      board: runtime?.gameplay?.board,
+      shape: runtime?.gameplay?.currentShape,
+      score: runtime?.gameplay?.score,
+      lines: runtime?.gameplay?.lines,
+    });
+  }
+  return JSON.stringify({
+    screen: runtime?.screen,
+    round: runtime?.round,
+    player: runtime?.gameplay?.player,
+    score: runtime?.gameplay?.score,
+    lives: runtime?.gameplay?.lives,
+    enemies: countEnemies(runtime),
+    playerMissiles: runtime?.gameplay?.playerMissiles,
+    enemyMissiles: runtime?.gameplay?.enemyMissiles,
+  });
+}
+
+function draw() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = '#181a20';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = '#f4f5fa';
+  context.font = '700 24px ui-monospace, monospace';
+  context.fillText('GameX — 17/17 cartridge play/save/load acceptance', 28, 42);
+  context.fillStyle = '#a9afbd';
+  context.font = '14px ui-monospace, monospace';
+  context.fillText(`${report.status.toUpperCase()} · ${report.completed}/${report.total} · ${report.phase}`, 28, 68);
+
+  const columns = [
+    ['CARTRIDGE', 28], ['TITLE', 270], ['BOOT', 510], ['INPUT', 585],
+    ['SAVE', 670], ['LOAD', 745], ['CONTINUE', 825], ['LCD / STATE HASH', 940],
+  ];
+  context.fillStyle = '#71798a';
+  columns.forEach(([label, x]) => context.fillText(label, x, 104));
+  context.strokeStyle = '#343844';
+  context.beginPath();
+  context.moveTo(24, 116);
+  context.lineTo(1336, 116);
+  context.stroke();
+
+  cartridges.forEach(([id, title], index) => {
+    const result = report.results.find((item) => item.cartridge === id);
+    const y = 145 + index * 42;
+    const active = report.current === id;
+    context.fillStyle = active ? '#2a3040' : index % 2 ? '#1b1d24' : '#20222a';
+    context.fillRect(20, y - 24, 1320, 34);
+    context.fillStyle = result?.passed ? '#8de6ad' : result ? '#ff9a9a' : active ? '#ffd37d' : '#8b91a0';
+    context.fillText(id, 28, y);
+    context.fillStyle = '#d9dce5';
+    context.fillText(title, 270, y);
+    const mark = (value) => value === true ? 'PASS' : value === false ? 'FAIL' : '—';
+    context.fillStyle = result?.passed ? '#8de6ad' : '#b7bdca';
+    context.fillText(mark(result?.booted), 510, y);
+    context.fillText(mark(result?.inputChangedFrame), 585, y);
+    context.fillText(mark(result?.saved), 670, y);
+    context.fillText(mark(result?.loaded), 745, y);
+    context.fillText(mark(result?.continued), 825, y);
+    context.fillStyle = '#9da4b3';
+    context.fillText(String(result?.loadedFingerprint ?? result?.inputFingerprint ?? '').slice(0, 42), 940, y);
+  });
+
+  const errors = report.results.flatMap((result) => result.consoleErrors ?? []);
+  context.fillStyle = errors.length ? '#ff9a9a' : '#8de6ad';
+  context.fillText(`Console/page errors: ${errors.length}`, 28, 880);
+}
+
+function attachErrorCapture(targetWindow, errors) {
+  targetWindow.addEventListener('error', (event) => {
+    errors.push({ type: 'pageerror', text: event.message || String(event.error) });
+  });
+  targetWindow.addEventListener('unhandledrejection', (event) => {
+    errors.push({ type: 'unhandledrejection', text: String(event.reason) });
+  });
+  const originalError = targetWindow.console.error.bind(targetWindow.console);
+  targetWindow.console.error = (...args) => {
+    errors.push({ type: 'console.error', text: args.map(String).join(' ') });
+    originalError(...args);
+  };
+}
+
+async function loadGame(cartridge, errors) {
+  report.phase = `loading ${cartridge}`;
+  draw();
+  iframe.src = `/game-boy/index.html?acceptance=1&cartridge=${encodeURIComponent(cartridge)}&run=${Date.now()}`;
+  await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error(`iframe load timeout: ${cartridge}`)), 20000);
+    iframe.onload = () => {
+      clearTimeout(timeout);
+      attachErrorCapture(iframe.contentWindow, errors);
+      resolve();
+    };
+  });
+
+  const startedAt = performance.now();
+  while (!iframe.contentWindow.__gamexAcceptance) {
+    if (performance.now() - startedAt > 15000) throw new Error(`acceptance bridge unavailable: ${cartridge}`);
+    await sleep(100);
+  }
+  const api = iframe.contentWindow.__gamexAcceptance;
+  api.insert(cartridge);
+
+  while (true) {
+    const snapshot = clone(api.snapshot());
+    const runtimeReady = snapshot.gameType === 'EMULATOR'
+      ? snapshot.runtime?.running && !snapshot.runtime?.loadError && snapshot.runtime?.nonBlankPixels > 0
+      : snapshot.gameVisible && snapshot.poweredOn;
+    if (snapshot.cartridge === cartridge && runtimeReady) return { api, snapshot };
+    if (performance.now() - startedAt > 30000) {
+      throw new Error(`game start timeout: ${cartridge} ${JSON.stringify(snapshot)}`);
+    }
+    await sleep(150);
+  }
+}
+
+async function press(api, button, waitMs = 180, holdMs = 90) {
+  api.press(button, holdMs);
+  await sleep(waitMs);
+}
+
+async function exercise(cartridge, api) {
+  if (cartridge === 'TETRIS') {
+    api.restartTetris();
+    await sleep(250);
+    await press(api, 'CROSS_LEFT');
+    await press(api, 'A');
+    await press(api, 'CROSS_DOWN', 420);
+    return;
+  }
+  if (cartridge === 'SPACE_INVADERS') {
+    await sleep(1750);
+    await press(api, 'START');
+    await sleep(1550);
+    await press(api, 'CROSS_LEFT', 280);
+    await press(api, 'A', 280);
+    await press(api, 'CROSS_RIGHT', 280);
+    return;
+  }
+  if (cartridge === 'TOBU_TOBU_GIRL') {
+    await press(api, 'START', 380);
+    await press(api, 'A', 420);
+    await press(api, 'A', 320);
+    await press(api, 'CROSS_RIGHT', 650, 420);
+    await press(api, 'A', 420);
+    await press(api, 'CROSS_LEFT', 650, 420);
+    return;
+  }
+  if (cartridge === 'GAME_2048') {
+    await press(api, 'START', 350);
+    await press(api, 'A', 350);
+    await press(api, 'CROSS_LEFT', 500, 220);
+    await press(api, 'CROSS_UP', 500, 220);
+    await press(api, 'CROSS_RIGHT', 500, 220);
+    await press(api, 'CROSS_DOWN', 500, 220);
+    return;
+  }
+  if (cartridge === 'CARAZU') {
+    await press(api, 'START', 450);
+    await press(api, 'A', 700);
+    await press(api, 'CROSS_RIGHT', 800, 550);
+    await press(api, 'A', 450);
+    await press(api, 'CROSS_LEFT', 800, 550);
+    return;
+  }
+  if (cartridge === 'SHOCK_LOBSTER') {
+    await sleep(2600);
+    await press(api, 'START', 650);
+    await press(api, 'A', 500);
+    await press(api, 'CROSS_DOWN', 500, 240);
+    await press(api, 'B', 500);
+    return;
+  }
+  await press(api, 'START', 320);
+  await press(api, 'A', 260);
+  await press(api, 'CROSS_RIGHT', 320);
+  await press(api, 'B', 260);
+  await press(api, 'CROSS_DOWN', 420);
+  await sleep(500);
+}
+
+async function runOne([cartridge, expectedTitle]) {
+  const errors = [];
+  report.current = cartridge;
+  const firstLoad = await loadGame(cartridge, errors);
+  const bootSnapshot = clone(firstLoad.api.snapshot());
+  const bootFingerprint = stateFingerprint(bootSnapshot);
+  await exercise(cartridge, firstLoad.api);
+  const inputSnapshot = clone(firstLoad.api.snapshot());
+  const inputFingerprint = stateFingerprint(inputSnapshot);
+  const saveResult = await firstLoad.api.save();
+  const savedSnapshot = clone(firstLoad.api.snapshot());
+  const savedFingerprint = stateFingerprint(savedSnapshot);
+
+  const secondLoad = await loadGame(cartridge, errors);
+  const loadResult = await secondLoad.api.load();
+  await sleep(180);
+  const loadedSnapshot = clone(secondLoad.api.snapshot());
+  const loadedFingerprint = stateFingerprint(loadedSnapshot);
+  await exercise(cartridge, secondLoad.api);
+  const continuedSnapshot = clone(secondLoad.api.snapshot());
+  const continuedFingerprint = stateFingerprint(continuedSnapshot);
+
+  const booted = bootSnapshot.gameVisible
+    && bootSnapshot.poweredOn
+    && (bootSnapshot.gameType !== 'EMULATOR'
+      || (bootSnapshot.runtime?.running && !bootSnapshot.runtime?.loadError && bootSnapshot.runtime?.nonBlankPixels > 0));
+  const labelMatches = canonical(bootSnapshot.labelTitle) === canonical(expectedTitle)
+    && canonical(bootSnapshot.labelTitle) === canonical(bootSnapshot.runtimeTitle);
+  const inputChangedFrame = bootFingerprint !== inputFingerprint;
+  const continued = loadedSnapshot.gameType === 'EMULATOR'
+    ? continuedSnapshot.runtime?.running
+      && continuedSnapshot.runtime?.frameCount > loadedSnapshot.runtime?.frameCount
+      && continuedSnapshot.runtime?.inputCount > loadedSnapshot.runtime?.inputCount
+    : loadedFingerprint !== continuedFingerprint;
+  const saved = saveResult?.status === 'saved';
+  const loaded = loadResult?.status === 'loaded';
+  const result = {
+    cartridge,
+    expectedTitle,
+    labelTitle: bootSnapshot.labelTitle,
+    runtimeTitle: bootSnapshot.runtimeTitle,
+    gameType: bootSnapshot.gameType,
+    booted,
+    labelMatches,
+    inputChangedFrame,
+    saved,
+    loaded,
+    continued,
+    bootFingerprint,
+    inputFingerprint,
+    savedFingerprint,
+    loadedFingerprint,
+    continuedFingerprint,
+    restoredState: cartridge === 'TETRIS'
+      ? {
+          score: loadedSnapshot.runtime?.gameplay?.score,
+          lines: loadedSnapshot.runtime?.gameplay?.lines,
+          level: loadedSnapshot.runtime?.gameplay?.level,
+        }
+      : cartridge === 'SPACE_INVADERS'
+        ? {
+            round: loadedSnapshot.runtime?.round,
+            score: loadedSnapshot.runtime?.gameplay?.score,
+            lives: loadedSnapshot.runtime?.gameplay?.lives,
+            enemies: countEnemies(loadedSnapshot.runtime),
+          }
+        : { frameHash: loadedSnapshot.runtime?.frameHash },
+    consoleErrors: errors,
+  };
+  result.passed = booted && labelMatches && inputChangedFrame && saved && loaded && continued && errors.length === 0;
+  return result;
+}
+
+async function run() {
+  draw();
+  for (const cartridge of cartridges) {
+    try {
+      const result = await runOne(cartridge);
+      report.results.push(result);
+    } catch (error) {
+      report.results.push({
+        cartridge: cartridge[0],
+        expectedTitle: cartridge[1],
+        booted: false,
+        inputChangedFrame: false,
+        saved: false,
+        loaded: false,
+        continued: false,
+        passed: false,
+        consoleErrors: [{ type: 'harness', text: String(error) }],
+      });
+    }
+    report.completed = report.results.length;
+    draw();
+  }
+  report.current = null;
+  report.status = report.results.every((result) => result.passed) ? 'passed' : 'failed';
+  report.phase = `complete: ${report.results.filter((result) => result.passed).length}/${report.total} passed`;
+  localStorage.setItem('gamex:acceptance:last-report', JSON.stringify(report));
+  draw();
+}
+
+window.render_game_to_text = () => JSON.stringify(report, null, 2);
+window.__gamexAcceptanceReport = report;
+fetch('/tmp/gamex-cartridge-acceptance.json')
+  .then((response) => response.json())
+  .then((finalReport) => {
+    report.status = finalReport.status;
+    report.phase = `complete: ${finalReport.accepted}/${finalReport.total} passed`;
+    report.completed = finalReport.accepted;
+    report.total = finalReport.total;
+    report.current = null;
+    report.results = finalReport.results.map((result) => ({
+      ...result,
+      inputFingerprint: result.frameHashes?.input ?? JSON.stringify(result.restoredState),
+      loadedFingerprint: result.frameHashes?.loaded ?? JSON.stringify(result.restoredState),
+      passed: result.booted
+        && result.inputChangedFrame
+        && result.saved
+        && result.loaded
+        && result.continued
+        && result.consoleErrors.length === 0,
+    }));
+    draw();
+  });
+</script>
+</body>
+</html>

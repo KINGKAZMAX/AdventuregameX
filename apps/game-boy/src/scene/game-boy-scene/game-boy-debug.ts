@@ -266,32 +266,45 @@ export default class GameBoyDebug extends THREE.Group {
       disabled: true,
     });
 
-    let selectedCartridge: CARTRIDGE_TYPE = CARTRIDGE_TYPE.JpRed;
+    let selectedCartridge: CARTRIDGE_TYPE = CARTRIDGE_TYPE.Adjustris;
     gameBoyFolder.addBlade({
       view: 'list',
-      label: 'Cartridge',
+      label: 'Collection',
       options: [
-        { text: 'Pocket Monsters Aka (JP 1996)', value: CARTRIDGE_TYPE.JpRed },
-        { text: 'Pocket Monsters Midori (JP 1996)', value: CARTRIDGE_TYPE.JpGreen },
-        { text: 'Pocket Monsters Ao (JP 1996)', value: CARTRIDGE_TYPE.JpBlue },
-        { text: 'Pocket Monsters Pikachu (JP 1998)', value: CARTRIDGE_TYPE.JpPikachu },
-        { text: 'Pokemon Red (US 1998)', value: CARTRIDGE_TYPE.UsRed },
-        { text: 'Pokemon Blue (US 1998)', value: CARTRIDGE_TYPE.UsBlue },
-        { text: 'Pokemon Pinball (US 1999)', value: CARTRIDGE_TYPE.Pinball },
-        { text: 'Pokemon Yellow (US 1999)', value: CARTRIDGE_TYPE.UsYellow },
-        { text: 'Pocket Monsters Kin (JP 1999)', value: CARTRIDGE_TYPE.JpGold },
-        { text: 'Pocket Monsters Gin (JP 1999)', value: CARTRIDGE_TYPE.JpSilver },
-        { text: 'Pokemon TCG (US 2000)', value: CARTRIDGE_TYPE.Tcg },
-        { text: 'Pokemon Gold (US 2000)', value: CARTRIDGE_TYPE.UsGold },
-        { text: 'Pokemon Silver (US 2000)', value: CARTRIDGE_TYPE.UsSilver },
-        { text: 'Pokemon Puzzle Challenge (US 2000)', value: CARTRIDGE_TYPE.Puzzle },
-        { text: 'Pokemon Crystal (US 2001)', value: CARTRIDGE_TYPE.UsCrystal },
-        { text: 'Tetris (storage)', value: CARTRIDGE_TYPE.Tetris },
-        { text: 'Space Invaders (storage)', value: CARTRIDGE_TYPE.SpaceInvaders },
+        { text: 'Adjustris', value: CARTRIDGE_TYPE.Adjustris },
+        { text: 'Breksta\'s Cat', value: CARTRIDGE_TYPE.BrekstasCat },
+        { text: 'AIRPLANZ', value: CARTRIDGE_TYPE.Airplanz },
+        { text: 'CrossConnect', value: CARTRIDGE_TYPE.CrossConnect },
+        { text: 'Dyson\'s Fear', value: CARTRIDGE_TYPE.DysonsFear },
+        { text: 'Unstoppable Knight', value: CARTRIDGE_TYPE.UnstoppableKnight },
+        { text: 'Wyrmhole', value: CARTRIDGE_TYPE.Wyrmhole },
+        { text: 'Tobu Tobu Girl', value: CARTRIDGE_TYPE.TobuTobuGirl },
+        { text: 'Micro City', value: CARTRIDGE_TYPE.MicroCity },
+        { text: '2048', value: CARTRIDGE_TYPE.Game2048 },
+        { text: 'GB Corp.', value: CARTRIDGE_TYPE.GbCorp },
+        { text: 'Carazu', value: CARTRIDGE_TYPE.Carazu },
+        { text: 'Shock Lobster', value: CARTRIDGE_TYPE.ShockLobster },
+        { text: 'Geometrix', value: CARTRIDGE_TYPE.Geometrix },
+        { text: 'GB Wordyl', value: CARTRIDGE_TYPE.GbWordyl },
       ],
-      value: CARTRIDGE_TYPE.JpRed,
+      value: CARTRIDGE_TYPE.Adjustris,
     }).on('change', (cartridgeType) => {
       selectedCartridge = cartridgeType.value;
+    });
+
+    gameBoyFolder.addBlade({
+      view: 'list',
+      label: 'Archive',
+      options: [
+        { text: 'Choose archived cartridge', value: null },
+        { text: 'Tetris', value: CARTRIDGE_TYPE.Tetris },
+        { text: 'Space Invaders', value: CARTRIDGE_TYPE.SpaceInvaders },
+      ],
+      value: null,
+    }).on('change', (cartridgeType) => {
+      if (cartridgeType.value !== null) {
+        selectedCartridge = cartridgeType.value;
+      }
     });
 
     gameBoyFolder.addButton({

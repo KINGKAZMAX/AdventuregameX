@@ -8,13 +8,15 @@
     "dev": "vite",
     "start": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run"
   },
   "devDependencies": {
     "sharp": "^0.35.2",
     "three-webgl-stats": "^1.0.5",
     "vite": "^4.1.0",
-    "vite-plugin-glsl": "^1.1.2"
+    "vite-plugin-glsl": "^1.1.2",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@types/three": "^0.172.0",

@@ -1,6 +1,7 @@
 import { Container, Sprite, Spritesheet, Texture } from 'pixi.js';
 import Loader from '../../../../../../../core/loader';
 import { PLAYER_MOVEMENT_STATE } from '../../data/space-invaders-data';
+import type { SpaceInvadersPlayerState } from '../../state/space-invaders-save-state';
 
 export default class Player extends Container {
   private view: Sprite;
@@ -48,6 +49,24 @@ export default class Player extends Container {
     this.view.visible = true;
     this.playerHit.visible = false;
     this.isPlayerActive = true;
+  }
+
+  public captureState(): SpaceInvadersPlayerState {
+    return {
+      x: this.x,
+      y: this.y,
+      movement: this.moveState,
+      active: this.isPlayerActive,
+    };
+  }
+
+  public restoreState(state: SpaceInvadersPlayerState): void {
+    this.x = state.x;
+    this.y = state.y;
+    this.moveState = state.movement as PLAYER_MOVEMENT_STATE;
+    this.isPlayerActive = state.active;
+    this.view.visible = state.active;
+    this.playerHit.visible = !state.active;
   }
 
   private init() {

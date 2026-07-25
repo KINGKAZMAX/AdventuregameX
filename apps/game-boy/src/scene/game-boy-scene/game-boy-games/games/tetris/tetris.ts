@@ -7,8 +7,10 @@ import { EventEmitter } from 'pixi.js';
 import { TETRIS_CONFIG } from './data/tetris-config';
 import { GAME_TYPE } from '../../data/games-config';
 import DEBUG_CONFIG from '../../../../../Data/Configs/Main/debug-config';
+import { isTetrisSaveStateV1, type TetrisSaveStateV1 } from './state/tetris-save-state';
+import type { SaveableBuiltinGame } from '../../save/saveable-builtin-game';
 
-export default class Tetris extends GameAbstract {
+export default class Tetris extends GameAbstract implements SaveableBuiltinGame<TetrisSaveStateV1> {
   public events: EventEmitter;
 
   private screens: { [key: string]: any };
@@ -88,6 +90,27 @@ export default class Tetris extends GameAbstract {
     this.screens[TETRIS_SCREEN_TYPE.Gameplay].clearBottomLine();
   }
 
+  public captureState(): TetrisSaveStateV1 {
+    return {
+      version: 1,
+      screen: (this.currentScreenType ?? TETRIS_SCREEN_TYPE.License) as TetrisSaveStateV1['screen'],
+      gameplay: this.screens[TETRIS_SCREEN_TYPE.Gameplay].captureState(),
+    };
+  }
+
+  public restoreState(state: TetrisSaveStateV1): boolean {
+    if (!isTetrisSaveStateV1(state)) {
+      return false;
+    }
+
+    const backup = this.captureState();
+    if (this.applyState(state)) {
+      return true;
+    }
+    this.applyState(backup);
+    return false;
+  }
+
   private reset(): void {
     for (let screenType in this.screens) {
       this.screens[screenType].reset();
@@ -103,6 +126,18 @@ export default class Tetris extends GameAbstract {
   private showScreen(screenType: string): void {
     this.currentScreenType = screenType;
     this.screens[screenType].show();
+  }
+
+  private applyState(state: TetrisSaveStateV1): boolean {
+    try {
+      this.stopTweens();
+      this.hideAllScreens();
+      this.reset();
+      this.showScreen(state.screen);
+      return this.screens[TETRIS_SCREEN_TYPE.Gameplay].restoreState(state.gameplay);
+    } catch {
+      return false;
+    }
   }
 
   private init(): void {

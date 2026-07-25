@@ -11,6 +11,7 @@ import { TETRIS_CONFIG } from '../../data/tetris-config';
 import GameBoyAudio from '../../../../../game-boy/game-boy-audio/game-boy-audio';
 import { GAME_BOY_SOUND_TYPE } from '../../../../../game-boy/game-boy-audio/game-boy-audio-data';
 import { Text, Sprite, Spritesheet, Texture } from 'pixi.js';
+import type { TetrisGameplayState } from '../../state/tetris-save-state';
 
 export default class GameplayScreen extends GameScreenAbstract {
   protected screenType: TETRIS_SCREEN_TYPE.Gameplay = TETRIS_SCREEN_TYPE.Gameplay;
@@ -99,6 +100,41 @@ export default class GameplayScreen extends GameScreenAbstract {
 
   public clearBottomLine(): void {
     this.field.clearBottomLine();
+  }
+
+  public captureState(): TetrisGameplayState {
+    return {
+      ...this.field.captureState(),
+      active: this.isGameActive,
+      paused: this.isPaused,
+      gameOver: this.gameOver,
+    };
+  }
+
+  public restoreState(state: TetrisGameplayState): boolean {
+    if (!this.field.restoreState(state)) {
+      return false;
+    }
+
+    this.isGameActive = state.active;
+    this.isPaused = state.paused;
+    this.gameOver = state.gameOver;
+    this.linesCount.text = Math.min(state.lines, 9999).toString();
+    this.score.text = Math.min(state.score, 999999).toString();
+    this.level.text = state.level.toString();
+
+    this.pausePopup.hide();
+    this.gameOverPopup.hide();
+    this.field.show();
+    if (state.paused) {
+      this.pausePopup.show();
+      this.field.hide();
+    }
+    if (state.gameOver) {
+      this.nextShape?.hide();
+      this.gameOverPopup.show();
+    }
+    return true;
   }
 
   private onPauseClick(): void {

@@ -1,6 +1,7 @@
 import { Container, Sprite, Spritesheet, Texture } from 'pixi.js';
 import Loader from '../../../../../../../../core/loader';
 import { MISSILES_CONFIG, MISSILE_TYPE } from './missile-config';
+import type { SpaceInvadersPlayerMissileState } from '../../../state/space-invaders-save-state';
 
 export default class PlayerMissile extends Container {
   private type: string;
@@ -35,6 +36,10 @@ export default class PlayerMissile extends Container {
 
   public getSpeed(): number {
     return this.speed;
+  }
+
+  public captureState(): SpaceInvadersPlayerMissileState {
+    return { x: this.x, y: this.y };
   }
 
   public explode(): void {

@@ -322,3 +322,80 @@ Game Boy lineup in version-matched colours: Red, Blue, Yellow, Green, Gold, Silv
   and routing through the same Save/Load controls as WasmBoy games.
 - Next gate: write and self-check the TDD implementation plan, then execute it
   inline.
+
+## 2026-07-25 — Truthful cartridge collection automated acceptance
+
+- Replaced the active Pokémon-labelled mismatch set with 15 original labels whose
+  titles, cartridge configs, emulator configs, bundled ROMs, attribution records,
+  license texts, and source archives all identify the same open-source games.
+- Kept the existing Tetris and Space Invaders cartridges in a separate `Archive`
+  group. Both remain insertable and playable, so the product inventory is 15
+  open-ROM cartridges plus 2 preserved built-in cartridges.
+- Added one Save/Load entry point for all 17 cartridges. WasmBoy games retain
+  cartridge-scoped emulator snapshots; Tetris and Space Invaders use validated,
+  versioned, transactional snapshots under
+  `gamex:builtin-save:TETRIS:v1` and
+  `gamex:builtin-save:SPACE_INVADERS:v1`.
+- Automated save-state coverage: 4 Vitest files, 29/29 tests passed. The tests
+  cover store envelopes and failure handling, three-way routing, exact built-in
+  keys, Tetris board/gameplay validation, and Space Invaders player/enemy/missile
+  validation.
+- Full repository build passed and synchronized `public/game-boy` through
+  `scripts/build-all.mjs`; no release files were copied by hand.
+- Repository regression: 11/11 `verify:*` scripts passed, including the truthful
+  15 + 2 inventory, ROM/header/checksum/license/source audit, cartridge layout,
+  Pixi runtime, LCD refresh, Hub frame, language bridge, and both application
+  shells.
+- Remaining release gate: browser acceptance must insert and play every
+  cartridge, exercise controls, save, refresh, reload, continue, inspect
+  screenshots, and record console errors for a final 17/17 report.
+
+## 2026-07-25 — Browser play/save/load acceptance: 17/17
+
+- Used the prescribed `develop-web-game` Playwright client against the built Hub
+  app. Every cartridge was inserted through the real cartridge controller,
+  booted, exercised with Start/D-pad/A/B input, saved, refreshed in the same
+  browser storage context, reinserted, loaded, and exercised again.
+- Final result: 17/17 passed title matching, boot, input response, save, load,
+  and continued-play checks; 0 console errors and 0 page errors.
+- All 15 WasmBoy games produced non-blank LCD frames and input-dependent frame
+  hashes. Static/menu-heavy games also had tailored sequences based on their
+  upstream control documentation rather than relying on animation alone.
+- Tetris restored Gameplay with its board, active shape, score, lines, level,
+  timing, and flags; a subsequent move/drop changed the active shape state.
+- Space Invaders restored round 1 with 3 lives, score 0, 40 enemies, player and
+  missile state; subsequent movement/fire changed player and missile state.
+- Auditable artifacts:
+  `tmp/gamex-cartridge-acceptance.json` contains every per-cartridge result and
+  LCD/state fingerprints; `tmp/gamex-cartridge-acceptance.html` renders the
+  final 17-row acceptance table.
+- The query-gated acceptance bridge used to collect runtime state was removed
+  from product code after evidence capture. The final release build contains no
+  acceptance-only hook.
+
+## 2026-07-25 — Matching-cartridge final verification
+
+- Final fresh test run: `npm --prefix apps/game-boy test` passed 4 files and
+  29/29 tests with 0 failures.
+- Final Game Boy build: `npm --prefix apps/game-boy run build` passed TypeScript
+  compilation and Vite production bundling.
+- Final repository regression: all 11 `verify:*` scripts exited 0.
+- Final full build: `npm run build` rebuilt Game Boy, Dammagotchi, and the Hub,
+  synchronized the ignored `public` release tree, and exited 0.
+- Release-tree inventory:
+  - 15 active manifest entries and exactly 15 published GB/GBC ROMs;
+  - 2 preserved Archive cartridges (Tetris and Space Invaders);
+  - 30/30 unique active label textures (standard + in-pocket), with retained
+    legacy assets left unreferenced rather than deleted;
+  - 15/15 license files and normalized title matches in `ATTRIBUTION.md`;
+  - 7 GPL-family source archives, already covered by the checksum/source audit;
+  - 17/17 browser play/save/refresh/load/continue results with 0 errors.
+- Final browser evidence:
+  `tmp/gamex-cartridge-acceptance.json` and
+  `tmp/gamex-cartridge-acceptance.html`.
+- Known non-blocking build warnings remain unchanged: unresolved stylesheet
+  font/keyboard-image URLs that are resolved at runtime, third-party Three.js
+  helper bundles containing `eval`, and Vite chunk-size advisories. No warning
+  caused a build or runtime acceptance failure.
+- Worktree boundary check: no user research JSON or unrelated submission
+  document was staged or committed by this branch.

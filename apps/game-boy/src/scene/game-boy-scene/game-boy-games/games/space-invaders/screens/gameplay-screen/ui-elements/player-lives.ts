@@ -33,16 +33,24 @@ export default class PlayerLives extends Container {
   }
 
   public reset(): void {
-    this.lives = SPACE_INVADERS_CONFIG.player.livesAtStart;
+    this.restoreState(SPACE_INVADERS_CONFIG.player.livesAtStart);
+  }
 
-    for (let i = 0; i < this.livesViews.length; i++) {
-      const lifeView: Sprite = this.livesViews[i];
-      this.removeChild(lifeView);
-    }
+  public captureState(): number {
+    return this.lives;
+  }
 
+  public restoreState(lives: number): void {
+    this.lives = lives;
+    this.livesViews.forEach((lifeView) => this.removeChild(lifeView));
     this.livesViews = [];
 
-    this.init();
+    for (let i = 0; i < lives; i++) {
+      const lifeView = this.createLifeView();
+      this.addChild(lifeView);
+      lifeView.x = i * 10;
+      this.livesViews.push(lifeView);
+    }
   }
 
   private init(): void {

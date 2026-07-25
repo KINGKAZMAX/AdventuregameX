@@ -1,7 +1,6 @@
 import { Container, Graphics, Text } from 'pixi.js';
 import ScreenAbstract from '../../screens/screen-abstract';
 import { GAME_BOY_CONFIG } from '../../../game-boy/data/game-boy-config';
-import { CARTRIDGE_TYPE } from '../../../cartridges/data/cartridges-config';
 import { BUTTON_TYPE } from '../../../game-boy/data/game-boy-data';
 import { Timeout, TimeoutInstance } from '../../../../../core/helpers/timeout';
 
@@ -14,16 +13,15 @@ type Palette = {
   banner: number;
 };
 
-// Original tribute palettes — version colours only, no copyrighted artwork
-// is drawn on the LCD (the 3D cartridge shells carry the real label scans).
-const PALETTES: { [key: string]: Palette } = {
-  [CARTRIDGE_TYPE.JpRed]:     { name: 'RED',     bg: 0xc62a22, bgBottom: 0x7d130f, body: 0xe8503a, accent: 0xffcf3a, banner: 0xa3160f },
-  [CARTRIDGE_TYPE.JpGreen]:   { name: 'GREEN',   bg: 0x2f9a4f, bgBottom: 0x0f5a2a, body: 0x4fb86a, accent: 0xbff0a0, banner: 0x1d7a3a },
-  [CARTRIDGE_TYPE.JpBlue]:    { name: 'BLUE',    bg: 0x1f5fbf, bgBottom: 0x0e2f73, body: 0x3aa0e8, accent: 0xbfe9ff, banner: 0x13418f },
-  [CARTRIDGE_TYPE.JpPikachu]: { name: 'PIKACHU', bg: 0xf4b81e, bgBottom: 0x9c6c00, body: 0xffd23a, accent: 0xe8503a, banner: 0xc98a00 },
-  [CARTRIDGE_TYPE.UsRed]:     { name: 'RED',     bg: 0xc62a22, bgBottom: 0x7d130f, body: 0xe8503a, accent: 0xffcf3a, banner: 0xa3160f },
-  [CARTRIDGE_TYPE.UsBlue]:    { name: 'BLUE',    bg: 0x1f5fbf, bgBottom: 0x0e2f73, body: 0x3aa0e8, accent: 0xbfe9ff, banner: 0x13418f },
-  [CARTRIDGE_TYPE.Pinball]:   { name: 'PINBALL', bg: 0xd94f8a, bgBottom: 0x6e1f42, body: 0xff7ab0, accent: 0xffd23a, banner: 0xa32a5e },
+// Historical, inactive splash retained as source material. No selectable
+// cartridge maps to this class.
+const ARCHIVED_PALETTE: Palette = {
+  name: 'ARCHIVE',
+  bg: 0x38445a,
+  bgBottom: 0x1c2535,
+  body: 0x65b8b0,
+  accent: 0xf0d267,
+  banner: 0x27344a,
 };
 
 export default class PocketCreatures extends ScreenAbstract {
@@ -86,7 +84,7 @@ export default class PocketCreatures extends ScreenAbstract {
 
     const width: number = GAME_BOY_CONFIG.screen.width;
     const height: number = GAME_BOY_CONFIG.screen.height;
-    const palette: Palette = PALETTES[GAME_BOY_CONFIG.currentCartridge] || PALETTES[CARTRIDGE_TYPE.JpRed];
+    const palette: Palette = ARCHIVED_PALETTE;
 
     const content: Container = this.content = new Container();
     this.addChild(content);

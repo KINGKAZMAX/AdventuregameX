@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>自由意志 GameX — Expo Deck</title>
+<style>
+  :root {
+    --accent: #3c3c43;
+    --bg: #f4f1ea;
+    --card: #ffffff;
+    --ink: #1c1c1f;
+    --muted: #6b6b70;
+    --line: #dedad0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    overflow: hidden;
+  }
+  #deck { position: relative; width: 100vw; height: 100vh; }
+  .slide {
+    position: absolute; inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 7vh 9vw;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  .slide.active { display: flex; opacity: 1; }
+  .kicker {
+    font-size: clamp(14px, 1.4vw, 18px);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+  }
+  h1 {
+    font-size: clamp(32px, 5vw, 64px);
+    line-height: 1.15;
+    margin: 0 0 0.6em 0;
+    font-weight: 800;
+  }
+  h1 small {
+    display: block;
+    font-size: 0.42em;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 0.4em;
+  }
+  p.lead {
+    font-size: clamp(18px, 2vw, 26px);
+    line-height: 1.55;
+    max-width: 46em;
+    color: var(--ink);
+  }
+  ul.points {
+    list-style: none;
+    padding: 0;
+    margin: 1.2em 0 0 0;
+    display: grid;
+    gap: 0.9em;
+    font-size: clamp(16px, 1.7vw, 22px);
+    max-width: 50em;
+  }
+  ul.points li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 0.9em 1.2em;
+    display: flex;
+    gap: 0.7em;
+    align-items: baseline;
+  }
+  ul.points li b { color: var(--accent); min-width: 1.4em; }
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5vw;
+    width: 100%;
+    max-width: 68em;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.4em 1.6em;
+  }
+  .card h3 { margin: 0 0 .5em 0; font-size: clamp(16px, 1.6vw, 20px); color: var(--accent); }
+  .card p, .card li { font-size: clamp(14px, 1.3vw, 17px); color: var(--ink); line-height: 1.5; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.5em; margin-top: 1em; }
+  .tag {
+    background: var(--accent); color: #fff;
+    border-radius: 999px; padding: 0.35em 0.9em;
+    font-size: clamp(12px, 1.1vw, 15px);
+  }
+  .cue {
+    background: var(--accent); color: #fff;
+    border-radius: 16px; padding: 1.6em 2em;
+    font-size: clamp(18px, 2.1vw, 28px);
+    line-height: 1.6;
+    max-width: 50em;
+  }
+  .cue b { display: block; font-size: 0.7em; opacity: .8; margin-bottom: .3em; letter-spacing: .08em; text-transform: uppercase; }
+  .footer-links {
+    position: absolute; bottom: 4vh; left: 9vw; right: 9vw;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: clamp(13px, 1.2vw, 16px); color: var(--muted);
+  }
+  #progress {
+    position: absolute; top: 0; left: 0; height: 4px; background: var(--accent);
+    transition: width .2s ease;
+  }
+  #nav-hint {
+    position: absolute; bottom: 2vh; right: 9vw;
+    font-size: 12px; color: var(--muted); opacity: .6;
+  }
+  .fill-space { flex: 1; }
+</style>
+</head>
+<body>
+<div id="deck">
+  <div id="progress"></div>
+
+  <section class="slide active">
+    <div class="kicker">AdventureX 2026 &middot; 8bit 元境</div>
+    <h1>自由意志 GameX
+      <small>Free Will｜8-bit Memory Odyssey</small>
+    </h1>
+    <p class="lead">一座可以被进入的数字记忆博物馆——旋转掌机、插入卡匣、重新点亮一段陪伴。</p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">为什么做</div>
+    <h1>把童年藏进屏幕的那代人，长大了</h1>
+    <p class="lead">
+      插入卡匣，按下开机键，在微弱的像素光里度过一整个下午。设备会沉默，按键会褪色，
+      记忆却还在等一次重新启动。我们想造一座能被重新打开的数字博物馆——
+      保存的不是硬件，是人与设备相遇时的温度。
+    </p>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">是什么</div>
+    <h1>可进入、可操作、可留下痕迹</h1>
+    <ul class="points">
+      <li><b>①</b> 旋转一台可交互的 3D 掌机，从环形卡匣墙上选卡带、插入</li>
+      <li><b>②</b> 浏览器里真实运行 15 款开放许可 Game Boy / GBC homebrew 游戏，可存档/读档</li>
+      <li><b>③</b> 两款内置原创小游戏（Tetris、Space Invaders）收纳在 Archive，同样可玩可存</li>
+      <li><b>④</b> 照料一只虚拟宠物：喂食、换色、留下个人痕迹</li>
+      <li><b>⑤</b> 双语中/英，原创 chiptune 背景音乐实时合成</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <div class="cue">
+      <b>现场演示 — Live Demo</b>
+      现在切到浏览器：旋转掌机 → 插入一张卡带 → 真实游玩几秒 → 打开 Save state 面板存档/读档 →
+      切换到 Tamagotchi 喂一次食。全程真实运行，没有预录视频。
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="grid2">
+      <div class="card">
+        <h3>技术栈</h3>
+        <p>Three.js · PixiJS · WebAssembly (WasmBoy) · Vite · TypeScript · Web Audio API · IndexedDB / localStorage</p>
+      </div>
+      <div class="card">
+        <h3>诚实的现状</h3>
+        <p>15 张卡带每一张的标签、游戏、存档都已核对一致（不是占位素材）。
+        更大的 3D 展馆改版、链上记忆凭证、PICO 空间版本仍在开发中，今天展示的是
+        已经真实可玩的核心体验。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">团队 &amp; 链接</div>
+    <h1>Thank you</h1>
+    <div class="tag-row">
+      <span class="tag">GitHub: github.com/KINGKAZMAX/AdventuregameX</span>
+      <span class="tag">[小红书链接 — 待填]</span>
+      <span class="tag">[队友姓名 — 待填]</span>
+    </div>
+  </section>
+
+  <div id="nav-hint">← → 或 空格键翻页</div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  let i = 0;
+  function show(n) {
+    slides[i].classList.remove('active');
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides[i].classList.add('active');
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+  }
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(i + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(i - 1);
+  });
+  document.addEventListener('click', () => show(i + 1));
+  show(0);
+</script>
+</body>
+</html>

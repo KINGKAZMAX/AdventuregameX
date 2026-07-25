@@ -11,11 +11,13 @@ A single web app that hosts two interactive retro toys behind one hub:
 The hub embeds each experience in an iframe, switches between them, remembers your
 language (English / 中文), and plays an original cozy chiptune with an on/off toggle.
 
-> **Note on trademarks & artwork.** GameX is a personal, non-commercial project. The
-> cartridge shells reproduce photographs of real, released Pokémon cartridges purely
-> for display — *Pokémon*, *Game Boy* and *Nintendo* are trademarks of their
-> respective owners and this project is not affiliated with or endorsed by them. The
-> games that actually **run** are all open-licensed homebrew titles (see below).
+> **Note on trademarks & artwork.** GameX is a personal, non-commercial project and is
+> not affiliated with or endorsed by Nintendo. Every cartridge on display runs a real,
+> open-licensed homebrew game — see [`ATTRIBUTION.md`](apps/game-boy/public/roms/ATTRIBUTION.md)
+> for authors, licences and source links. Earlier prototype builds used photographed
+> Pokémon cartridge shells purely as visual placeholders; those never shipped as the
+> public experience and have been fully replaced with truthful, original labels for
+> the games that actually run.
 
 ---
 
@@ -23,17 +25,19 @@ language (English / 中文), and plays an original cozy chiptune with an on/off 
 
 ### Game Boy experience
 - **Interactive 3D handheld** (Three.js) — drag to rotate, scroll to zoom.
-- **15 official Pokémon cartridge shells** arranged on one symmetric **horseshoe
-  wreath** in chronological release order (JP Red → … → Crystal). Real per-release
-  shell colours and label art, baked from high-resolution cartridge scans.
+- **15 truthful open-source cartridges** arranged on one symmetric **horseshoe
+  wreath**, each with an original label naming the real game it runs — no mismatched
+  or placeholder branding.
 - **Long-press any cartridge** to open a bilingual info card describing the
-  open-source game it runs (title, author, licence and a "view source" link) or the
-  real release it represents.
-- **8 real, playable homebrew games** emulated in-browser via
-  [WasmBoy](https://github.com/torch2424/wasmBoy): Tobu Tobu Girl, µCity, 2048,
-  GB Wordyl, Carazu, Geometrix, GB Corp. and Shock Lobster.
+  open-source game it runs (title, author, licence and a "view source" link).
+- **15 real, playable homebrew games** emulated in-browser via
+  [WasmBoy](https://github.com/torch2424/wasmBoy): Adjustris, Breksta's Cat, AIRPLANZ,
+  CrossConnect, Dyson's Fear, Unstoppable Knight, Wyrmhole, Tobu Tobu Girl, Micro City,
+  2048, GB Corp., Carazu, Shock Lobster, Geometrix and GB Wordyl — full attribution in
+  [`ATTRIBUTION.md`](apps/game-boy/public/roms/ATTRIBUTION.md).
 - **Save states & battery saves** persist across reloads.
-- Two original built-in mini-games (Tetris, Space Invaders) kept in "storage".
+- Two original built-in mini-games (Tetris, Space Invaders) kept in an "Archive" —
+  still insertable and playable, each with its own save/load.
 
 ### Tamagotchi experience
 - Virtual-pet device with feeding, care, colour themes, a pixel UI and sound.
@@ -103,8 +107,8 @@ GameX/
 │   │   │   └── roms/          #   bundled homebrew ROMs + ATTRIBUTION.md
 │   │   └── tools/             #   cartridge texture pipeline + source data
 │   │       ├── build-cartridges.mjs      #   bakes label art onto cartridge atlases
-│   │       ├── pokemon-cartridges.json   #   the 15 releases (order, colours, crops)
-│   │       ├── homebrew-cartridges.json  #   ROM → cartridge mapping
+│   │       ├── pokemon-cartridges.json   #   historical/inert — not used by the active baker
+│   │       ├── homebrew-cartridges.json  #   ROM → cartridge mapping (source of truth)
 │   │       ├── sources/                  #   high-res cartridge scans (backup data)
 │   │       └── bases/                    #   baked UV atlases
 │   └── dammagotchi/           # virtual pet (AGPL-3.0)

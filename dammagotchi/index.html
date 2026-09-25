@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Tamagotchi</title>
+
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
+
+    <meta name="theme-color" content="#ffffff" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kablammo:MORF@0..60&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://kit.fontawesome.com/7fdff1040a.js" crossorigin="anonymous"></script>
+    <script type="module" crossorigin src="./assets/index-pL_MVwTO.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CI2VrYjM.css">
+  </head>
+  <!-- workaround for Safari: tells the browser to react to touch events (triggers "active" state on buttons)  -->
+  <body>
+    <main>
+      <div class="credits"></div>
+
+      <div class="tutorial-overlay hidden">
+        <div class="tutorial-spotlight"></div>
+      </div>
+
+      <svg id="countdown" width="150" height="150" class="hidden">
+        <circle class="stroke-red-500" cx="75" cy="75" r="60"></circle>
+        <circle id="progress" class="stroke-white" cx="75" cy="75" r="60"></circle>
+      </svg>
+
+      <canvas class="webgl"></canvas>
+
+      <footer>
+        <div class="fab-group">
+          <button id="colors" class="fab">
+            <i class="fa-solid fa-palette"></i>
+          </button>
+          <div id="sounds" class="flex flex-col gap-2">
+            <button id="muted" class="fab">
+              <i class="fa-solid fa-volume-xmark"></i>
+            </button>
+            <button id="music" class="fab">
+              <div class="flex w-full justify-center relative">
+                <i class="fa-solid fa-music"></i>
+                <i class="fa-solid fa-slash absolute left-2"></i>
+              </div>
+            </button>
+          </div>
+          <button id="speed-settings" class="fab">
+            <div class="flex w-full justify-center pl-0.5 gap-0">
+              <i class="fa-solid fa-play"></i>
+            </div>
+          </button>
+
+          <div id="picker" class="absolute -bottom-1.5 left-14 w-60 hidden">
+            <button id="randomize" class="fab absolute -right-12 top-0">
+              <i class="fa-solid fa-dice"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="fab-group right-2.5">
+          <button id="fullscreen" class="fab">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+        </div>
+
+        <div class="flex gap-2">
+          <button id="tutorial" class="fab outlined"><i class="fa-solid fa-question"></i></button>
+        </div>
+      </footer>
+    </main>
+
+  </body>
+</html>
